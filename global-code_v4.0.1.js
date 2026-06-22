@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.0"
+const version = "4.0.1"
 
 let lenis = null;
 let nextPage = document;
@@ -41,6 +41,7 @@ function initOnceFunctions() {
   // Runs once on first load
   // if (has('[data-something]')) initSomething();
 
+  initPortalButtons();
 
   handleMobileNavLinkClicks();
   initNavTooltips();
@@ -403,7 +404,7 @@ function initHighlightText(page) {
   ScrollTrigger.refresh();
 }
 
-function initPortal() { //TODO check if works, and make sure it runs correctly with the page transition.
+function initPortalButtons() { //TODO check if works, and make sure it runs correctly with the page transition.
   "use strict";
 
   var config = {
