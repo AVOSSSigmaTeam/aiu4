@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.2"
+const version = "4.0.3"
 
 let lenis = null;
 let nextPage = document;
@@ -47,7 +47,6 @@ function initOnceFunctions() {
   initNavTooltips();
   initNavigationMenuExpandAnimation();
 
-  if (has('[data-footer]')) setCopyrightYear();
 }
 
 function initBeforeEnterFunctions(next) {
@@ -55,6 +54,8 @@ function initBeforeEnterFunctions(next) {
 
   // Runs before the enter animation
   // if (has('[data-something]')) initSomething();
+  
+  if (has('[data-footer]')) setCopyrightYear(nextPage);
 }
 
 function initAfterEnterFunctions(next) {
