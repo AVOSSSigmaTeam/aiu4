@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.17";
+const version = "4.0.18";
 console.log("V" + version);
 
 
@@ -1533,7 +1533,6 @@ function formatDates(page) {
 
 // TODO init blob animations
 
-// TODO init horizontal scrolling section
 function initHorizontalScrollingSectionAnimation (page) {
   const sections = page.querySelectorAll('[data-horizontal-scroll-section]');
   if (sections.length === 0) return;
@@ -1554,7 +1553,7 @@ function initHorizontalScrollingSectionAnimation (page) {
     tl.fromTo(row, {
       xPercent: 0
     }, {
-      xPercent: -100,
+      xPercent: -50,
       ease: "linear",
     });
 
