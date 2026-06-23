@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.16";
+const version = "4.0.17";
 console.log("V" + version);
 
 
@@ -1554,7 +1554,7 @@ function initHorizontalScrollingSectionAnimation (page) {
     tl.fromTo(row, {
       xPercent: 0
     }, {
-      xPercent: 100,
+      xPercent: -100,
       ease: "linear",
     });
 
