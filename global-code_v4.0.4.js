@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.3"
+const version = "4.0.4"
 
 let lenis = null;
 let nextPage = document;
@@ -54,7 +54,7 @@ function initBeforeEnterFunctions(next) {
 
   // Runs before the enter animation
   // if (has('[data-something]')) initSomething();
-  
+
   if (has('[data-footer]')) setCopyrightYear(nextPage);
 }
 
@@ -905,74 +905,74 @@ function initCounters(page) {
 }
 
 function initPageBlurAnimation() {
-    const topBlur = document.querySelector('[data-blur-top]');
-    const bottomBlur = document.querySelector('[data-blur-bottom]');
+  const topBlur = document.querySelector('[data-blur-top]');
+  const bottomBlur = document.querySelector('[data-blur-bottom]');
 
-    if (!topBlur || !bottomBlur) return;
+  if (!topBlur || !bottomBlur) return;
 
-    const state = {
-      heroProgress: 0,
-      footerProgress: 0,
-    };
+  const state = {
+    heroProgress: 0,
+    footerProgress: 0,
+  };
 
-    function renderBlur() {
-      const maxBlur = 3;
+  function renderBlur() {
+    const maxBlur = 3;
 
-      const topValue = maxBlur * state.heroProgress;
-      const bottomValue = maxBlur * state.heroProgress * (1 - state.footerProgress);
-
-      gsap.set(topBlur, {
-        "--blur-top": `${topValue}rem`,
-      });
-
-      gsap.set(bottomBlur, {
-        "--blur-bottom": `${bottomValue}rem`,
-      });
-    }
+    const topValue = maxBlur * state.heroProgress;
+    const bottomValue = maxBlur * state.heroProgress * (1 - state.footerProgress);
 
     gsap.set(topBlur, {
-      "--blur-top": "0rem",
+      "--blur-top": `${topValue}rem`,
     });
 
     gsap.set(bottomBlur, {
-      "--blur-bottom": "0rem",
+      "--blur-bottom": `${bottomValue}rem`,
     });
-
-    const animatedHeroSection = document.querySelector('[data-animated-hero]');
-
-    if (animatedHeroSection) {
-      ScrollTrigger.create({
-        trigger: animatedHeroSection,
-        start: "10% top",
-        end: "bottom bottom",
-        scrub: true,
-        onUpdate: (self) => {
-          state.heroProgress = self.progress;
-          renderBlur();
-        },
-      });
-    } else {
-      state.heroProgress = 1;
-      renderBlur();
-    }
-
-    const footer = document.querySelector('[data-footer]');
-
-    if (footer) {
-      ScrollTrigger.create({
-        trigger: footer,
-        start: "top bottom",
-        end: "bottom bottom",
-        scrub: true,
-        onUpdate: (self) => {
-          state.footerProgress = self.progress;
-          renderBlur();
-        },
-      });
-    }
-
-    // if (DEBUG) console.log("page blur initialized");
   }
+
+  gsap.set(topBlur, {
+    "--blur-top": "0rem",
+  });
+
+  gsap.set(bottomBlur, {
+    "--blur-bottom": "0rem",
+  });
+
+  const animatedHeroSection = document.querySelector('[data-animated-hero]');
+
+  if (animatedHeroSection) {
+    ScrollTrigger.create({
+      trigger: animatedHeroSection,
+      start: "10% top",
+      end: "bottom bottom",
+      scrub: true,
+      onUpdate: (self) => {
+        state.heroProgress = self.progress;
+        renderBlur();
+      },
+    });
+  } else {
+    state.heroProgress = 1;
+    renderBlur();
+  }
+
+  const footer = document.querySelector('[data-footer]');
+
+  if (footer) {
+    ScrollTrigger.create({
+      trigger: footer,
+      start: "top bottom",
+      end: "bottom bottom",
+      scrub: true,
+      onUpdate: (self) => {
+        state.footerProgress = self.progress;
+        renderBlur();
+      },
+    });
+  }
+
+  if (DEBUG) console.log("page blur initialized");
+}
 //TODO check if this owrks propperly with cross fade page transition
 // function initPageBlurAnimation(page) { 
 //   const topBlur = page.querySelector('[data-blur-top]');
@@ -1049,7 +1049,7 @@ function setCopyrightYear(page) {
   if (!yearElement) return;
   const currentYear = new Date().getFullYear();
   yearElement.textContent = currentYear;
-  // if (DEBUG) console.log("Copyright year set to", currentYear);
+  if (DEBUG) console.log("Copyright year set to", currentYear);
 }
 
 // popups
