@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.11";
+const version = "4.0.12";
 
 let lenis = null;
 let nextPage = document;
@@ -57,11 +57,13 @@ function initBeforeEnterFunctions(next) {
   // if (has('[data-something]')) initSomething();
 
   if (has('[data-marquee]')) initMarquees(nextPage);
+
+  if (has('[data-format-date]')) formatDates(nextPage);
   
   if (has('[data-faq-item]')) initFAQ(nextPage);
   if (has('[data-faq-tabs]')) initFAQWraps(nextPage);
 
-  if (has('[data-counter]')) initCounters();
+  if (has('[data-counter]')) initCounters(nextPage);
 
   if (has('[data-footer]')) setCopyrightYear(nextPage);
 }
@@ -921,7 +923,6 @@ function initFAQ(page) {
   // if (DEBUG) console.log("FAQ initialized");
 
 }
-// TODO fix just doesnt work
 function initFAQWraps(page) {
   const blocks = page.querySelectorAll('[data-faq-block]');
   if (blocks.length === 0) return;
@@ -1130,3 +1131,17 @@ function setCopyrightYear(page) {
 // TODO init coming-soon / legal page blob animation
 
 // TODO add date formating function (have on NUTRI)
+function formatDates(page) {
+  let dateElements = page.querySelectorAll('[data-format-date]');
+  if (dateElements.length === 0) return;
+
+  dateElements.forEach(dateElement => {
+    let date = new Date(dateElement.getAttribute('data-format-date'));
+    let monthText = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"];
+    dateElement.textContent = date.getDate() + ". " + monthText[date.getMonth()] + " " + date.getFullYear();
+  });
+
+  // if (DEBUG) console.log("Blog post dates initialized");
+}
+
+// TODO init CMS filters (have on NUTRI)
