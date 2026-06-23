@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.4"
+const version = "4.0.6";
 
 let lenis = null;
 let nextPage = document;
@@ -66,6 +66,8 @@ function initAfterEnterFunctions(next) {
 
   // Add scrolltrigger based animations below
   initPageBlurAnimation();
+
+  initHeroAnimation(nextPage);
 
   if (hasLenis) {
     lenis.resize();
@@ -389,8 +391,6 @@ function initHeroAnimation(page) {
   if (!grid) return;
   const content = page.querySelector('[data-hero-content]');
   if (!content) return;
-
-  const tl = gsap.timeline();
 
   const tl = gsap.timeline({
     scrollTrigger: {
