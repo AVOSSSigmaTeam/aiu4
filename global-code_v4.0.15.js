@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.14";
+const version = "4.0.15";
 
 let lenis = null;
 let nextPage = document;
@@ -48,6 +48,8 @@ function initOnceFunctions() {
   initNavigationMenuExpandAnimation();
 
   initFavicons();
+  
+  if (DEBUG) console.log("V" + version);
 }
 
 function initBeforeEnterFunctions(next) {
@@ -228,8 +230,6 @@ barba.init({
       // First load
       async once(data) {
         initOnceFunctions();
-
-        if (DEBUG) console.log("V" + version);
 
         return runPageOnceAnimation(data.next.container);
       },
@@ -1204,7 +1204,7 @@ function initImageAsciiReveal(page) {
       cropY = (source.naturalHeight - cropH) / 2;
     }
 
-    var samplingCanvas = page.createElement("canvas");
+    var samplingCanvas = document.createElement("canvas");
     samplingCanvas.width = metrics.columns;
     samplingCanvas.height = metrics.rows;
 
@@ -1403,7 +1403,7 @@ function initImageAsciiReveal(page) {
     // img.classList.add("aiu-ascii-img");
 
     var config = getConfig(gallery, img);
-    var canvas = page.createElement("canvas");
+    var canvas = document.createElement("canvas");
     canvas.className = "aiu-ascii-canvas";
     canvas.setAttribute("aria-hidden", "true");
     item.appendChild(canvas);
