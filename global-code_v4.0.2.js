@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.1"
+const version = "4.0.2"
 
 let lenis = null;
 let nextPage = document;
@@ -46,6 +46,8 @@ function initOnceFunctions() {
   handleMobileNavLinkClicks();
   initNavTooltips();
   initNavigationMenuExpandAnimation();
+
+  if (has('[data-footer]')) setCopyrightYear();
 }
 
 function initBeforeEnterFunctions(next) {
@@ -61,6 +63,8 @@ function initAfterEnterFunctions(next) {
   // Runs after enter animation completes
   // if (has('[data-something]')) initSomething();
 
+  // Add scrolltrigger based animations below
+  initPageBlurAnimation();
 
   if (hasLenis) {
     lenis.resize();
@@ -356,6 +360,21 @@ Number.prototype.numberFormat = function (decimals, decimalSeparator, thousandsS
   var r = this.toFixed(decimals).split(".");
   return r[0] = r[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator), r.join(decimalSeparator)
 };
+
+function isMobileOrTablet() {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+
+  const mobileRegex = /android|iphone|ipod|blackberry|iemobile|opera mini/i;
+  const tabletRegex = /ipad|tablet|kindle|playbook|silk/i;
+
+  const isMobile = mobileRegex.test(ua);
+  const isTablet = tabletRegex.test(ua);
+
+  // Fallback: treat small screens as mobile/tablet
+  const isSmallScreen = window.matchMedia("(max-width: 991px)").matches;
+
+  return isMobile || isTablet || isSmallScreen;
+}
 
 
 // -----------------------------------------
@@ -884,76 +903,161 @@ function initCounters(page) {
   });
 }
 
+function initPageBlurAnimation() {
+    const topBlur = document.querySelector('[data-blur-top]');
+    const bottomBlur = document.querySelector('[data-blur-bottom]');
 
-function initPageBlurAnimation(page) { //TODO check if this owrks propperly with cross fade page transition
-  const topBlur = page.querySelector('[data-blur-top]');
-  const bottomBlur = page.querySelector('[data-blur-bottom]');
+    if (!topBlur || !bottomBlur) return;
 
-  if (!topBlur || !bottomBlur) return;
+    const state = {
+      heroProgress: 0,
+      footerProgress: 0,
+    };
 
-  const state = {
-    heroProgress: 0,
-    footerProgress: 0,
-  };
+    function renderBlur() {
+      const maxBlur = 3;
 
-  function renderBlur() {
-    const maxBlur = 3;
+      const topValue = maxBlur * state.heroProgress;
+      const bottomValue = maxBlur * state.heroProgress * (1 - state.footerProgress);
 
-    const topValue = maxBlur * state.heroProgress;
-    const bottomValue = maxBlur * state.heroProgress * (1 - state.footerProgress);
+      gsap.set(topBlur, {
+        "--blur-top": `${topValue}rem`,
+      });
+
+      gsap.set(bottomBlur, {
+        "--blur-bottom": `${bottomValue}rem`,
+      });
+    }
 
     gsap.set(topBlur, {
-      "--blur-top": `${topValue}rem`,
+      "--blur-top": "0rem",
     });
 
     gsap.set(bottomBlur, {
-      "--blur-bottom": `${bottomValue}rem`,
+      "--blur-bottom": "0rem",
     });
+
+    const animatedHeroSection = document.querySelector('[data-animated-hero]');
+
+    if (animatedHeroSection) {
+      ScrollTrigger.create({
+        trigger: animatedHeroSection,
+        start: "10% top",
+        end: "bottom bottom",
+        scrub: true,
+        onUpdate: (self) => {
+          state.heroProgress = self.progress;
+          renderBlur();
+        },
+      });
+    } else {
+      state.heroProgress = 1;
+      renderBlur();
+    }
+
+    const footer = document.querySelector('[data-footer]');
+
+    if (footer) {
+      ScrollTrigger.create({
+        trigger: footer,
+        start: "top bottom",
+        end: "bottom bottom",
+        scrub: true,
+        onUpdate: (self) => {
+          state.footerProgress = self.progress;
+          renderBlur();
+        },
+      });
+    }
+
+    // if (DEBUG) console.log("page blur initialized");
   }
+//TODO check if this owrks propperly with cross fade page transition
+// function initPageBlurAnimation(page) { 
+//   const topBlur = page.querySelector('[data-blur-top]');
+//   const bottomBlur = page.querySelector('[data-blur-bottom]');
 
-  gsap.set(topBlur, {
-    "--blur-top": "0rem",
-  });
+//   if (!topBlur || !bottomBlur) return;
 
-  gsap.set(bottomBlur, {
-    "--blur-bottom": "0rem",
-  });
+//   const state = {
+//     heroProgress: 0,
+//     footerProgress: 0,
+//   };
 
-  const animatedHeroSection = page.querySelector('[data-animated-hero]');
+//   function renderBlur() {
+//     const maxBlur = 3;
 
-  if (animatedHeroSection) {
-    ScrollTrigger.create({
-      trigger: animatedHeroSection,
-      start: "10% top",
-      end: "bottom bottom",
-      scrub: true,
-      onUpdate: (self) => {
-        state.heroProgress = self.progress;
-        renderBlur();
-      },
-    });
-  } else {
-    state.heroProgress = 1;
-    renderBlur();
-  }
+//     const topValue = maxBlur * state.heroProgress;
+//     const bottomValue = maxBlur * state.heroProgress * (1 - state.footerProgress);
 
-  const footer = page.querySelector('[data-footer]');
+//     gsap.set(topBlur, {
+//       "--blur-top": `${topValue}rem`,
+//     });
 
-  if (footer) {
-    ScrollTrigger.create({
-      trigger: footer,
-      start: "top bottom",
-      end: "bottom bottom",
-      scrub: true,
-      onUpdate: (self) => {
-        state.footerProgress = self.progress;
-        renderBlur();
-      },
-    });
-  }
+//     gsap.set(bottomBlur, {
+//       "--blur-bottom": `${bottomValue}rem`,
+//     });
+//   }
 
-  // if (DEBUG) console.log("page blur initialized");
+//   gsap.set(topBlur, {
+//     "--blur-top": "0rem",
+//   });
+
+//   gsap.set(bottomBlur, {
+//     "--blur-bottom": "0rem",
+//   });
+
+//   const animatedHeroSection = page.querySelector('[data-animated-hero]');
+
+//   if (animatedHeroSection) {
+//     ScrollTrigger.create({
+//       trigger: animatedHeroSection,
+//       start: "10% top",
+//       end: "bottom bottom",
+//       scrub: true,
+//       onUpdate: (self) => {
+//         state.heroProgress = self.progress;
+//         renderBlur();
+//       },
+//     });
+//   } else {
+//     state.heroProgress = 1;
+//     renderBlur();
+//   }
+
+//   const footer = page.querySelector('[data-footer]');
+
+//   if (footer) {
+//     ScrollTrigger.create({
+//       trigger: footer,
+//       start: "top bottom",
+//       end: "bottom bottom",
+//       scrub: true,
+//       onUpdate: (self) => {
+//         state.footerProgress = self.progress;
+//         renderBlur();
+//       },
+//     });
+//   }
+
+//   // if (DEBUG) console.log("page blur initialized");
+// }
+
+function setCopyrightYear(page) {
+  const yearElement = page.querySelector("[data-copyright-year]");
+  if (!yearElement) return;
+  const currentYear = new Date().getFullYear();
+  yearElement.textContent = currentYear;
+  // if (DEBUG) console.log("Copyright year set to", currentYear);
 }
 
 // popups
 // TODO init popups
+
+
+//animations
+// TODO init SP service item blob animation
+
+// TODO init coming-soon / legal page blob animation
+
+// TODO add date formating function (have on NUTRI)
