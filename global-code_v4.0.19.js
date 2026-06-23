@@ -1544,8 +1544,8 @@ function initHorizontalScrollingSectionAnimation (page) {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top top',
-        end: 'bottom bottom',
+        start: "top 25%",
+        end: "bottom bottom-=25%",
         scrub: true,
       },
     });
