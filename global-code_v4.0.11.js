@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.10";
+const version = "4.0.11";
 
 let lenis = null;
 let nextPage = document;
@@ -58,8 +58,8 @@ function initBeforeEnterFunctions(next) {
 
   if (has('[data-marquee]')) initMarquees(nextPage);
   
-  if (has('[data-faq-item]')) initFAQ();
-  if (has('[data-faq-tabs]')) initFAQWraps();
+  if (has('[data-faq-item]')) initFAQ(nextPage);
+  if (has('[data-faq-tabs]')) initFAQWraps(nextPage);
 
   if (has('[data-counter]')) initCounters();
 
@@ -829,7 +829,7 @@ function initNavTooltips() {
 
 //faq
 function initFAQ(page) {
-  const faqItems = page.querySelectorAll("[data-faq-item]");
+  const faqItems = page.querySelectorAll('[data-faq-item]');
   if (faqItems.length === 0) {
     // if (DEBUG) console.log("No FAQ items found");
     return;
@@ -837,14 +837,14 @@ function initFAQ(page) {
   // if (DEBUG) console.log(faqItems);
 
   faqItems.forEach(item => {
-    const question = item.querySelector("[data-faq-question]");
-    const answer = item.querySelector("[data-faq-answer]");
+    const question = item.querySelector('[data-faq-question]');
+    const answer = item.querySelector('[data-faq-answer]');
 
     if (!question || !answer) return;
 
-    const faqIconWrap = item.querySelector("[data-faq-icon-wrap]");
-    const faqIcon = item.querySelector("[data-faq-icon]");
-    const faqIconBar = faqIcon?.querySelector("[data-faq-icon-bar]");
+    const faqIconWrap = item.querySelector('[data-faq-icon-wrap]');
+    const faqIcon = item.querySelector('[data-faq-icon]');
+    const faqIconBar = faqIcon?.querySelector('[data-faq-icon-bar]');
 
     const faqAnimationDuration = 0.25;
 
@@ -921,7 +921,6 @@ function initFAQ(page) {
   // if (DEBUG) console.log("FAQ initialized");
 
 }
-
 // TODO fix just doesnt work
 function initFAQWraps(page) {
   const blocks = page.querySelectorAll('[data-faq-block]');
