@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.22";
+const version = "4.0.23";
 console.log("V" + version);
 
 
@@ -106,12 +106,26 @@ function initAfterEnterFunctions(next) {
 // PAGE TRANSITIONS
 // -----------------------------------------
 
+// function runPageOnceAnimation(next) {
+//   const tl = gsap.timeline();
+
+//   tl.call(() => {
+//     resetPage(next);
+//   }, null, 0);
+
+//   return tl;
+// }
 function runPageOnceAnimation(next) {
   const tl = gsap.timeline();
 
   tl.call(() => {
     resetPage(next);
   }, null, 0);
+
+  tl.to(next, {
+    autoAlpha: 1,
+    duration: 0.75,
+  }, 0);
 
   return tl;
 }
@@ -1561,9 +1575,7 @@ function initHorizontalScrollingSectionAnimation (page) {
     });
 
   });
-
-
-  if (DEBUG) console.log("Horizontal scrolling section animation initialized");
+  // if (DEBUG) console.log("Horizontal scrolling section animation initialized");
 }
 
 function initFadeInAnimation(page) {
@@ -1589,7 +1601,7 @@ function initFadeInAnimation(page) {
     }, 0.5);
 
   });
-  if (DEBUG) console.log("Fade in animation initialized");
+  // if (DEBUG) console.log("Fade in animation initialized");
 }
 
 function initFadeInFromBottomAnimation(page) {
@@ -1617,7 +1629,7 @@ function initFadeInFromBottomAnimation(page) {
     }, 0.2);
 
   });
-  if (DEBUG) console.log("Fade in from bottom animation initialized");
+  // if (DEBUG) console.log("Fade in from bottom animation initialized");
 }
 
 // TODO init first load page fade in animation
