@@ -382,6 +382,46 @@ function isMobileOrTablet() {
 // YOUR FUNCTIONS GO BELOW HERE
 // -----------------------------------------
 
+function initHeroAnimation(page) {
+  const section = page.querySelector('[data-animated-hero]');
+  if (!section) return;
+  const grid = page.querySelector('[data-hero-grid]');
+  if (!grid) return;
+  const content = page.querySelector('[data-hero-content]');
+  if (!content) return;
+
+  const tl = gsap.timeline();
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: section,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: true,
+    },
+  });
+
+  tl.to(grid, {
+    opacity: 1,
+    scale: 1.1,
+    duration: 10,
+    ease: 'linear',
+  }, 0)
+  .to(content, {
+    scale: 0.75,
+    duration: 4,
+    ease: 'linear',
+  }, 0)
+  .to(content, {
+    opacity: 0,
+    duration: 3,
+    ease: 'linear',
+  }, 1);
+
+  if (DEBUG) console.log("Hero animation initialized");
+}
+
+// TODO fix, just doesnt work
 function initHighlightText(page) {
   const splitHeadingTargets = page.querySelectorAll("[data-highlight-text]");
 
@@ -423,8 +463,8 @@ function initHighlightText(page) {
 
   ScrollTrigger.refresh();
 }
-
-function initPortalButtons() { //TODO check if works, and make sure it runs correctly with the page transition.
+//TODO check if works, and make sure it runs correctly with the page transition.
+function initPortalButtons() {
   "use strict";
 
   var config = {
@@ -602,8 +642,8 @@ function initPortalButtons() { //TODO check if works, and make sure it runs corr
     run();
   }
 }
-
-function initFavicons() { // TODO cahnge links when images are added
+// TODO cahnge links when images are added
+function initFavicons() {
   const regularIcon =
     'https://cdn.prod.website-files.com/6a2bd64ef620571116d167ab/6a2fefbcc5b19a5e2d0bd9f4_AI%20Univerzitet%20Favicon.png';
 
@@ -854,6 +894,7 @@ function initFAQ(page) {
 
 }
 
+// TODO fix just doesnt work
 function initFAQWraps(page) {
   const blocks = page.querySelectorAll('[data-faq-block]');
   if (blocks.length === 0) return;
