@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.13";
+const version = "4.0.14";
 
 let lenis = null;
 let nextPage = document;
@@ -1116,7 +1116,7 @@ function initImageAsciiReveal(page) {
   }
 
   function getMetrics(config, target) {
-    var measureCanvas = page.createElement("canvas");
+    var measureCanvas = document.createElement("canvas");
     var measureCtx = measureCanvas.getContext("2d");
 
     measureCtx.font = config.fontSize + "px monospace";
