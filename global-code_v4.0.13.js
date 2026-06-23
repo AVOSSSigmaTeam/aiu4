@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.12";
+const version = "4.0.13";
 
 let lenis = null;
 let nextPage = document;
@@ -76,6 +76,8 @@ function initAfterEnterFunctions(next) {
 
   // Add scrolltrigger based animations below
   initPageBlurAnimation();
+
+  initImageAsciiReveal(nextPage);
 
   initHeroAnimation(nextPage);
 
@@ -1042,76 +1044,6 @@ function initPageBlurAnimation() {
 
   if (DEBUG) console.log("page blur initialized");
 }
-//TODO check if this owrks propperly with cross fade page transition
-// function initPageBlurAnimation(page) { 
-//   const topBlur = page.querySelector('[data-blur-top]');
-//   const bottomBlur = page.querySelector('[data-blur-bottom]');
-
-//   if (!topBlur || !bottomBlur) return;
-
-//   const state = {
-//     heroProgress: 0,
-//     footerProgress: 0,
-//   };
-
-//   function renderBlur() {
-//     const maxBlur = 3;
-
-//     const topValue = maxBlur * state.heroProgress;
-//     const bottomValue = maxBlur * state.heroProgress * (1 - state.footerProgress);
-
-//     gsap.set(topBlur, {
-//       "--blur-top": `${topValue}rem`,
-//     });
-
-//     gsap.set(bottomBlur, {
-//       "--blur-bottom": `${bottomValue}rem`,
-//     });
-//   }
-
-//   gsap.set(topBlur, {
-//     "--blur-top": "0rem",
-//   });
-
-//   gsap.set(bottomBlur, {
-//     "--blur-bottom": "0rem",
-//   });
-
-//   const animatedHeroSection = page.querySelector('[data-animated-hero]');
-
-//   if (animatedHeroSection) {
-//     ScrollTrigger.create({
-//       trigger: animatedHeroSection,
-//       start: "10% top",
-//       end: "bottom bottom",
-//       scrub: true,
-//       onUpdate: (self) => {
-//         state.heroProgress = self.progress;
-//         renderBlur();
-//       },
-//     });
-//   } else {
-//     state.heroProgress = 1;
-//     renderBlur();
-//   }
-
-//   const footer = page.querySelector('[data-footer]');
-
-//   if (footer) {
-//     ScrollTrigger.create({
-//       trigger: footer,
-//       start: "top bottom",
-//       end: "bottom bottom",
-//       scrub: true,
-//       onUpdate: (self) => {
-//         state.footerProgress = self.progress;
-//         renderBlur();
-//       },
-//     });
-//   }
-
-//   // if (DEBUG) console.log("page blur initialized");
-// }
 
 function setCopyrightYear(page) {
   const yearElement = page.querySelector("[data-copyright-year]");
@@ -1119,6 +1051,455 @@ function setCopyrightYear(page) {
   const currentYear = new Date().getFullYear();
   yearElement.textContent = currentYear;
   if (DEBUG) console.log("Copyright year set to", currentYear);
+}
+
+function initImageAsciiReveal(page) {
+  "use strict";
+
+  var DEFAULTS = {
+    chars: "........:::=+xX#0369",
+    fontSize: 14,
+    aspectWidth: 4,
+    aspectHeight: 5,
+    columns: 75,
+    imageStaggerMs: 50,
+    cellAppearMs: .5,
+    scrambleCount: 5,
+    scrambleSpeedMs: 35,
+    revealDelayMs: 0,
+    foreground: "#c8d3d6",
+    background: "#000000",
+    maxDpr: 2,
+  };
+
+  var initialized = false;
+
+  function toNumber(value, fallback) {
+    var number = Number(value);
+    return Number.isFinite(number) ? number : fallback;
+  }
+
+  function parseAspect(value, fallbackWidth, fallbackHeight) {
+    if (!value) return { width: fallbackWidth, height: fallbackHeight };
+    var parts = String(value).split("/");
+    if (parts.length !== 2) return { width: fallbackWidth, height: fallbackHeight };
+    var width = toNumber(parts[0].trim(), fallbackWidth);
+    var height = toNumber(parts[1].trim(), fallbackHeight);
+    return { width: width, height: height };
+  }
+
+  function getConfig(gallery, img) {
+    var data = Object.assign({}, gallery.dataset, img.dataset);
+    var backgroundColor = gallery.getAttribute("data-background-color");
+    var aspect = parseAspect(
+      data.asciiAspect,
+      DEFAULTS.aspectWidth,
+      DEFAULTS.aspectHeight,
+    );
+
+    return {
+      chars: data.asciiChars || DEFAULTS.chars,
+      fontSize: toNumber(data.asciiFontSize, DEFAULTS.fontSize),
+      aspectWidth: aspect.width,
+      aspectHeight: aspect.height,
+      columns: Math.max(8, Math.round(toNumber(data.asciiColumns, DEFAULTS.columns))),
+      imageStaggerMs: toNumber(data.asciiStagger, DEFAULTS.imageStaggerMs),
+      cellAppearMs: toNumber(data.asciiCellAppear, DEFAULTS.cellAppearMs),
+      scrambleCount: Math.max(0, Math.round(toNumber(data.asciiScrambleCount, DEFAULTS.scrambleCount))),
+      scrambleSpeedMs: toNumber(data.asciiScrambleSpeed, DEFAULTS.scrambleSpeedMs),
+      revealDelayMs: toNumber(data.asciiRevealDelay, DEFAULTS.revealDelayMs),
+      foreground: data.asciiForeground || DEFAULTS.foreground,
+      background: backgroundColor && backgroundColor.trim() ? backgroundColor : DEFAULTS.background,
+      maxDpr: toNumber(data.asciiMaxDpr, DEFAULTS.maxDpr),
+      source: data.asciiSrc || "",
+    };
+  }
+
+  function getMetrics(config, target) {
+    var measureCanvas = page.createElement("canvas");
+    var measureCtx = measureCanvas.getContext("2d");
+
+    measureCtx.font = config.fontSize + "px monospace";
+
+    var charWidth = Math.ceil(measureCtx.measureText("M").width);
+    var charHeight = config.fontSize;
+
+    var columns = config.columns;
+    var rows;
+
+    if (target && target.width && target.height) {
+      columns = Math.max(8, Math.round(target.width / charWidth));
+      rows = Math.max(8, Math.round(target.height / charHeight));
+    } else {
+      rows = Math.round(
+        columns *
+        (config.aspectHeight / config.aspectWidth) *
+        (charWidth / charHeight)
+      );
+    }
+
+    return {
+      charWidth: charWidth,
+      charHeight: charHeight,
+      columns: columns,
+      rows: Math.max(8, rows),
+    };
+  }
+
+  function applyImageAspect(config, source) {
+    var width = source.naturalWidth || source.width;
+    var height = source.naturalHeight || source.height;
+
+    if (!width || !height) return config;
+
+    return Object.assign({}, config, {
+      aspectWidth: width,
+      aspectHeight: height,
+    });
+  }
+
+  function whenImageReady(img) {
+    if (img.complete && img.naturalWidth) return Promise.resolve();
+
+    return new Promise(function (resolve, reject) {
+      img.addEventListener("load", resolve, { once: true });
+      img.addEventListener("error", reject, { once: true });
+    });
+  }
+
+  function loadCanvasImage(img, config) {
+    return whenImageReady(img).then(function () {
+      var src = config.source || img.currentSrc || img.src;
+
+      return new Promise(function (resolve, reject) {
+        var source = new Image();
+        source.crossOrigin = "anonymous";
+        source.decoding = "async";
+        source.onload = function () {
+          resolve(source);
+        };
+        source.onerror = function () {
+          reject(new Error("ASCII image could not be loaded with CORS: " + src));
+        };
+        source.src = src;
+      }).catch(function () {
+        return img;
+      });
+    });
+  }
+
+  function imageToAsciiGrid(source, config, metrics) {
+    var imageAspect = source.naturalWidth / source.naturalHeight;
+    var itemAspect = config.aspectWidth / config.aspectHeight;
+    var cropX = 0;
+    var cropY = 0;
+    var cropW = source.naturalWidth;
+    var cropH = source.naturalHeight;
+
+    if (imageAspect > itemAspect) {
+      cropW = source.naturalHeight * itemAspect;
+      cropX = (source.naturalWidth - cropW) / 2;
+    } else {
+      cropH = source.naturalWidth / itemAspect;
+      cropY = (source.naturalHeight - cropH) / 2;
+    }
+
+    var samplingCanvas = page.createElement("canvas");
+    samplingCanvas.width = metrics.columns;
+    samplingCanvas.height = metrics.rows;
+
+    var samplingCtx = samplingCanvas.getContext("2d");
+    samplingCtx.drawImage(
+      source,
+      cropX,
+      cropY,
+      cropW,
+      cropH,
+      0,
+      0,
+      metrics.columns,
+      metrics.rows,
+    );
+
+    var data = samplingCtx.getImageData(0, 0, metrics.columns, metrics.rows).data;
+    var asciiGrid = [];
+    var brightnessGrid = [];
+
+    for (var row = 0; row < metrics.rows; row++) {
+      var asciiRow = [];
+      var brightnessRow = [];
+
+      for (var col = 0; col < metrics.columns; col++) {
+        var pixelIndex = (row * metrics.columns + col) * 4;
+        var brightness =
+          (data[pixelIndex] * 0.299 +
+            data[pixelIndex + 1] * 0.587 +
+            data[pixelIndex + 2] * 0.114) /
+          255;
+        var charIndex = Math.min(
+          config.chars.length - 1,
+          Math.floor((1 - brightness) * config.chars.length),
+        );
+
+        asciiRow.push(config.chars[charIndex]);
+        brightnessRow.push(charIndex);
+      }
+
+      asciiGrid.push(asciiRow);
+      brightnessGrid.push(brightnessRow);
+    }
+
+    return {
+      asciiGrid: asciiGrid,
+      brightnessGrid: brightnessGrid,
+    };
+  }
+
+  function prepareCanvas(canvas, config, metrics) {
+    var dpr = Math.min(window.devicePixelRatio || 1, config.maxDpr);
+    canvas.width = metrics.columns * metrics.charWidth * dpr;
+    canvas.height = metrics.rows * metrics.charHeight * dpr;
+
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = config.background;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    return dpr;
+  }
+
+  function drawCharacter(ctx, config, metrics, col, row, char) {
+    ctx.fillStyle = config.background;
+    ctx.fillRect(
+      col * metrics.charWidth,
+      row * metrics.charHeight,
+      metrics.charWidth,
+      metrics.charHeight,
+    );
+    ctx.fillStyle = config.foreground;
+    ctx.fillText(char, col * metrics.charWidth, row * metrics.charHeight);
+  }
+
+  function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    return array;
+  }
+
+  function animateCells(canvas, item, asciiGrid, brightnessGrid, config, metrics, index) {
+    var denseCharIndex = config.chars.lastIndexOf(".");
+    var denseChars = config.chars.slice(denseCharIndex + 1).split("");
+    if (!denseChars.length) denseChars = config.chars.split("");
+
+    var dpr = prepareCanvas(canvas, config, metrics);
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = metrics.charHeight + "px monospace";
+    ctx.textBaseline = "top";
+
+    var totalCells = metrics.columns * metrics.rows;
+    var scrambleState = new Array(totalCells).fill(null);
+    var settledCount = 0;
+    var didReveal = false;
+    var staggerDelay = index * config.imageStaggerMs;
+    var cellOrder = shuffleArray(
+      Array.from({ length: totalCells }, function (_, i) {
+        return i;
+      }),
+    );
+
+    function scheduleReveal() {
+      if (didReveal) return;
+      didReveal = true;
+      setTimeout(function () {
+        item.classList.add("is-revealed");
+      }, config.revealDelayMs);
+    }
+
+    cellOrder.forEach(function (cellIndex, i) {
+      setTimeout(function () {
+        var row = Math.floor(cellIndex / metrics.columns);
+        var col = cellIndex % metrics.columns;
+        var isDark = brightnessGrid[row][col] > denseCharIndex;
+
+        if (!isDark) {
+          drawCharacter(ctx, config, metrics, col, row, asciiGrid[row][col]);
+          scrambleState[cellIndex] = 0;
+          settledCount++;
+          if (settledCount === totalCells) scheduleReveal();
+          return;
+        }
+
+        drawCharacter(
+          ctx,
+          config,
+          metrics,
+          col,
+          row,
+          denseChars[Math.floor(Math.random() * denseChars.length)],
+        );
+        scrambleState[cellIndex] = config.scrambleCount;
+      }, staggerDelay + i * config.cellAppearMs);
+    });
+
+    var scrambleTicker = setInterval(function () {
+      var stillScrambling = false;
+
+      for (var cellIndex = 0; cellIndex < totalCells; cellIndex++) {
+        var remaining = scrambleState[cellIndex];
+        if (remaining === null || remaining === 0) continue;
+
+        stillScrambling = true;
+        var row = Math.floor(cellIndex / metrics.columns);
+        var col = cellIndex % metrics.columns;
+
+        if (remaining === 1) {
+          drawCharacter(ctx, config, metrics, col, row, asciiGrid[row][col]);
+          scrambleState[cellIndex] = 0;
+          settledCount++;
+          if (settledCount === totalCells) scheduleReveal();
+        } else {
+          drawCharacter(
+            ctx,
+            config,
+            metrics,
+            col,
+            row,
+            denseChars[Math.floor(Math.random() * denseChars.length)],
+          );
+          scrambleState[cellIndex] = remaining - 1;
+        }
+      }
+
+      if (!stillScrambling && settledCount === totalCells) {
+        clearInterval(scrambleTicker);
+      }
+    }, config.scrambleSpeedMs);
+  }
+
+  function revealFallback(item, canvas) {
+    item.classList.add("is-failed");
+    if (canvas) canvas.remove();
+  }
+
+  function initImage(gallery, img, index) {
+    if (img.dataset.asciiInitialized === "true") return;
+    img.dataset.asciiInitialized = "true";
+
+    var item =
+      img.closest("[data-aiu-ascii-item]") ||
+      // img.closest(".aiu-ascii-item") ||
+      img.parentElement;
+
+    if (!item) {
+      // if (DEBUG) console.log("no images");
+      return;
+    }
+
+    item.classList.add("aiu-ascii-item");
+    // img.classList.add("aiu-ascii-img");
+
+    var config = getConfig(gallery, img);
+    var canvas = page.createElement("canvas");
+    canvas.className = "aiu-ascii-canvas";
+    canvas.setAttribute("aria-hidden", "true");
+    item.appendChild(canvas);
+
+    var shouldReduceMotion = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (shouldReduceMotion) {
+      revealFallback(item, canvas);
+      return;
+    }
+
+    loadCanvasImage(img, config)
+      .then(function (source) {
+        config = applyImageAspect(config, source);
+        var rect = item.getBoundingClientRect();
+        var metrics = getMetrics(config, rect);
+        var grids = imageToAsciiGrid(source, config, metrics);
+        animateCells(
+          canvas,
+          item,
+          grids.asciiGrid,
+          grids.brightnessGrid,
+          config,
+          metrics,
+          index,
+        );
+      })
+      .catch(function () {
+        revealFallback(item, canvas);
+      });
+  }
+
+  function initGallery(gallery) {
+    var images = Array.from(
+      //   gallery.querySelectorAll("img[data-aiu-ascii], img.ascii-reveal"),
+      gallery.querySelectorAll("img[data-aiu-ascii]"),
+    );
+    if (!images.length) { return; } 
+    // else { console.log(images) }
+
+    function start() {
+      images.forEach(function (img, index) {
+        initImage(gallery, img, index);
+      });
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      start();
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          observer.disconnect();
+          start();
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(gallery);
+  }
+
+  function initAsciiReveal() {
+    var galleries = Array.from(
+      //   page.querySelectorAll("[data-aiu-ascii-gallery], .aiu-ascii-gallery"),
+      page.querySelectorAll("[data-aiu-ascii-gallery]"),
+    );
+
+    galleries.forEach(initGallery);
+  }
+
+  window.AIUAsciiReveal = {
+    init: initAsciiReveal,
+  };
+
+  function boot() {
+    if (initialized) return;
+    initialized = true;
+    initAsciiReveal();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+
+  window.Webflow = window.Webflow || [];
+  window.Webflow.push(function () {
+    initialized = false;
+    boot();
+  });
 }
 
 // popups
@@ -1130,7 +1511,6 @@ function setCopyrightYear(page) {
 
 // TODO init coming-soon / legal page blob animation
 
-// TODO add date formating function (have on NUTRI)
 function formatDates(page) {
   let dateElements = page.querySelectorAll('[data-format-date]');
   if (dateElements.length === 0) return;
@@ -1145,3 +1525,9 @@ function formatDates(page) {
 }
 
 // TODO init CMS filters (have on NUTRI)
+
+// TODO init button hover animation
+
+// TODO init blob animations
+
+// TODO init horizontal scrolling section
