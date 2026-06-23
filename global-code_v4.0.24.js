@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.23";
+const version = "4.0.24";
 console.log("V" + version);
 
 
@@ -124,8 +124,9 @@ function runPageOnceAnimation(next) {
 
   tl.to(next, {
     autoAlpha: 1,
-    duration: 0.75,
-  }, 0);
+    // duration: 0.75,
+    duration: 5,
+  }, 0.01);
 
   return tl;
 }
