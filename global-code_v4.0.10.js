@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.9";
+const version = "4.0.10";
 
 let lenis = null;
 let nextPage = document;
@@ -702,7 +702,7 @@ function initMarquees(page) {
 
     gsap.to(groups, {
       xPercent: 100,
-      duration,
+      duration: 25,
       ease: "linear",
       repeat: -1,
     });
