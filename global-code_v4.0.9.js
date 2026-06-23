@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.8";
+const version = "4.0.9";
 
 let lenis = null;
 let nextPage = document;
@@ -651,13 +651,13 @@ function initPortalButtons() {
     run();
   }
 }
-// TODO cahnge links when images are added
+
 function initFavicons() {
   const regularIcon =
-    'https://cdn.prod.website-files.com/6a2bd64ef620571116d167ab/6a2fefbcc5b19a5e2d0bd9f4_AI%20Univerzitet%20Favicon.png';
+    'https://cdn.prod.website-files.com/6a38f83dcf1a859b76048858/6a3a8b2bbd78d9f870878553_AI%20Univerzitet%20Favicon.png';
 
   const notificationIcon =
-    'https://cdn.prod.website-files.com/6a2bd64ef620571116d167ab/6a2ff040d468e66a00257604_AI%20Univerzitet%20Favicon%20Notification.png';
+    'https://cdn.prod.website-files.com/6a38f83dcf1a859b76048858/6a3a8b407d6dd7ec65dd2965_AI%20Univerzitet%20Favicon%20Notification.png';
 
   const faviconSelectors = [
     'link[rel="icon"][media="(prefers-color-scheme: light)"]',
@@ -694,11 +694,11 @@ function initFavicons() {
 
 function initMarquees(page) {
   const marqees = page.querySelectorAll('[data-marquee]');
-  if (marqees.length() === 0) return;
+  if (marqees.length === 0) return;
   
   marqees.forEach(marqee => {
     const groups = marqee.querySelectorAll('[data-marquee-group]');
-    if (groups.length() === 0) return;
+    if (groups.length === 0) return;
 
     gsap.to(groups, {
       xPercent: 100,
@@ -708,7 +708,7 @@ function initMarquees(page) {
     });
   });
 
-  if (DEBUG) console.log("Marquees initialized: " + marqees.length());
+  if (DEBUG) console.log("Marquees initialized: " + marqees.length);
 }
 
 // nav
