@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.18";
+const version = "4.0.19";
 console.log("V" + version);
 
 
@@ -87,6 +87,9 @@ function initAfterEnterFunctions(next) {
   if (has('[data-highlight-text]')) initHighlightText(nextPage);
 
   if (has('[data-horizontal-scroll-section]')) initHorizontalScrollingSectionAnimation(nextPage);
+
+  if (has('[animate-fade-in]')) initFadeInAnimation(nextPage);
+  if (has('[animate-fade-in-from-bottom]')) initFadeInFromBottomAnimation(nextPage);
 
   if (hasLenis) {
     lenis.resize();
@@ -1561,6 +1564,56 @@ function initHorizontalScrollingSectionAnimation (page) {
 
 
   if (DEBUG) console.log("Horizontal scrolling section animation initialized");
+}
+
+function initFadeInAnimation(page) {
+  const targets = page.querySelectorAll('[animate-fade-in]');
+  if (targets.length === 0) return;
+
+  targets.forEach(target => {
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: target,
+        start: "top 75%",
+      },
+    });
+
+    tl.to(target, {
+      autoAlpha: 1,
+      duration: 1,
+    }, 0.5);
+
+  });
+  if (DEBUG) console.log("Fade in from bottom animation initialized");
+}
+
+function initFadeInFromBottomAnimation(page) {
+  const targets = page.querySelectorAll('[animate-fade-in-from-bottom]');
+  if (targets.length === 0) return;
+
+  targets.forEach(target => {
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: target,
+        start: "top 75%",
+      },
+    });
+
+    tl.set(target, {
+      y: "1.5rem",
+      autoAlpha: 0,
+    });
+
+    tl.to(target, {
+      y: "0rem",
+      autoAlpha: 1,
+      duration: 0.7,
+    }, 0.2);
+
+  });
+  if (DEBUG) console.log("Fade in from bottom animation initialized");
 }
 
 // TODO init first load page fade in animation
