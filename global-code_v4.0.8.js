@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.7";
+const version = "4.0.8";
 
 let lenis = null;
 let nextPage = document;
@@ -55,6 +55,13 @@ function initBeforeEnterFunctions(next) {
 
   // Runs before the enter animation
   // if (has('[data-something]')) initSomething();
+
+  if (has('[data-marquee]')) initMarquees(nextPage);
+  
+  if (has('[data-faq-item]')) initFAQ();
+  if (has('[data-faq-tabs]')) initFAQWraps();
+
+  if (has('[data-counter]')) initCounters();
 
   if (has('[data-footer]')) setCopyrightYear(nextPage);
 }
@@ -424,7 +431,6 @@ function initHeroAnimation(page) {
   if (DEBUG) console.log("Hero animation initialized");
 }
 
-// TODO fix, just doesnt work
 function initHighlightText(page) {
   const splitHeadingTargets = page.querySelectorAll("[data-highlight-text]");
 
@@ -684,6 +690,25 @@ function initFavicons() {
   document.addEventListener('keypress', resetInactivityTimer);
 
   resetInactivityTimer();
+}
+
+function initMarquees(page) {
+  const marqees = page.querySelectorAll('[data-marquee]');
+  if (marqees.length() === 0) return;
+  
+  marqees.forEach(marqee => {
+    const groups = marqee.querySelectorAll('[data-marquee-group]');
+    if (groups.length() === 0) return;
+
+    gsap.to(groups, {
+      xPercent: 100,
+      duration,
+      ease: "linear",
+      repeat: -1,
+    });
+  });
+
+  if (DEBUG) console.log("Marquees initialized: " + marqees.length());
 }
 
 // nav
