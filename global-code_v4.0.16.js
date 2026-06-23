@@ -2,8 +2,10 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 
 history.scrollRestoration = "manual";
 
-const DEBUG = false;
-const version = "4.0.15";
+const DEBUG = true;
+const version = "4.0.16";
+console.log("V" + version);
+
 
 let lenis = null;
 let nextPage = document;
@@ -48,8 +50,7 @@ function initOnceFunctions() {
   initNavigationMenuExpandAnimation();
 
   initFavicons();
-  
-  if (DEBUG) console.log("V" + version);
+
 }
 
 function initBeforeEnterFunctions(next) {
@@ -79,11 +80,13 @@ function initAfterEnterFunctions(next) {
   // Add scrolltrigger based animations below
   initPageBlurAnimation();
 
-  initImageAsciiReveal(nextPage);
+  if (has('[data-aiu-ascii-gallery]')) initImageAsciiReveal(nextPage);
 
-  initHeroAnimation(nextPage);
+  if (has('[data-animated-hero]')) initHeroAnimation(nextPage);
 
-  initHighlightText(nextPage);
+  if (has('[data-highlight-text]')) initHighlightText(nextPage);
+
+  if (has('[data-horizontal-scroll-section]')) initHorizontalScrollingSectionAnimation(nextPage);
 
   if (hasLenis) {
     lenis.resize();
@@ -1531,3 +1534,34 @@ function formatDates(page) {
 // TODO init blob animations
 
 // TODO init horizontal scrolling section
+function initHorizontalScrollingSectionAnimation (page) {
+  const sections = page.querySelectorAll('[data-horizontal-scroll-section]');
+  if (sections.length === 0) return;
+
+  sections.forEach(section => {
+    const row = section.querySelector('[data-scrolling-row]');
+    if (!row) return;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+      },
+    });
+
+    tl.fromTo(row, {
+      xPercent: 0
+    }, {
+      xPercent: 100,
+      ease: "linear",
+    });
+
+  });
+
+
+  if (DEBUG) console.log("Horizontal scrolling section animation initialized");
+}
+
+// TODO init first load page fade in animation
