@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = false;
-const version = "4.0.6";
+const version = "4.0.7";
 
 let lenis = null;
 let nextPage = document;
@@ -47,6 +47,7 @@ function initOnceFunctions() {
   initNavTooltips();
   initNavigationMenuExpandAnimation();
 
+  initFavicons();
 }
 
 function initBeforeEnterFunctions(next) {
@@ -68,6 +69,8 @@ function initAfterEnterFunctions(next) {
   initPageBlurAnimation();
 
   initHeroAnimation(nextPage);
+
+  initHighlightText(nextPage);
 
   if (hasLenis) {
     lenis.resize();
