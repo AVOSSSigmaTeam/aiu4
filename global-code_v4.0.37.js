@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.36";
+const version = "4.0.37";
 console.log("V" + version);
 
 
@@ -94,6 +94,9 @@ function initAfterEnterFunctions(next) {
 
   if (has('[animate-fade-in]')) initFadeInAnimation(nextPage);
   if (has('[animate-fade-in-from-bottom]')) initFadeInFromBottomAnimation(nextPage);
+
+  
+  if (has('[data-wide-section-content]')) initWideHeroSectionAnimation(nextPage); //TEST
 
   if (hasLenis) {
     lenis.resize();
@@ -274,7 +277,6 @@ barba.init({
 
       // New page enters
       async enter(data) {
-        initWideHeroSectionAnimation(data.next.container); //TEST
         return runPageEnterAnimation(data.next.container);
       }
     }
