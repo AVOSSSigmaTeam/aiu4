@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.27";
+const version = "4.0.28";
 console.log("V" + version);
 
 
@@ -69,6 +69,8 @@ function initBeforeEnterFunctions(next) {
   if (has('[data-counter]')) initCounters(nextPage);
 
   if (has('[data-footer]')) setCopyrightYear(nextPage);
+
+  if (has('[data-service-icon-box]')) initServiceIconBoxBlobAnimation(nextPage);
 }
 
 function initAfterEnterFunctions(next) {
