@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.32";
+const version = "4.0.33";
 console.log("V" + version);
 
 
@@ -1548,7 +1548,11 @@ function initServiceIconBoxBlobAnimation(page) {
     const blobA = box.querySelector('[data-service-item-blob-a]');
     const blobB = box.querySelector('[data-service-item-blob-b]');
 
-    gsap.set([blobA, blobB], {
+    gsap.set(blobA, {
+      opacity: 0,
+      scale: 0.7,
+    });
+    gsap.set(blobB, {
       opacity: 0,
       scale: 0.7,
     });
@@ -1561,37 +1565,27 @@ function initServiceIconBoxBlobAnimation(page) {
     
     const tl = gsap.timeline({ paused: true });
 
-    tl.fromTo(blobA, {
-      opacity: 0,
-      scale: 0.7,
-    }, {
+    tl.to(blobA, {
       opacity: 1,
       scale: 1,
       duration: 0.2,
-      ease: "linear",
+      ease: "smooth",
     }, 0)
-    .fromTo(grid, {
-      opacity: .2,
-    }, {
+    .to(grid, {
       opacity: .6,
       duration: 0.2,
-      ease: "linear",
+      ease: "smooth",
     }, 0)
-    .fromTo(box, {
-      backgroundColor: "var(--colors-interface--dark-2)",
-    }, {
+    .to(box, {
       backgroundColor: "var(--colors-brand--brand-1)",
       duration: 0.2,
-      ease: "linear",
+      ease: "smooth",
     }, 0)
-    .fromTo(blobB, {
-      opacity: 0,
-      scale: 0.7,
-    }, {
+    .to(blobB, {
       opacity: 1,
       scale: 1,
       duration: 0.2,
-      ease: "linear",
+      ease: "smooth",
     }, 0.2);
 
 
