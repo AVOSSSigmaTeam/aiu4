@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.24";
+const version = "4.0.25";
 console.log("V" + version);
 
 
@@ -106,27 +106,35 @@ function initAfterEnterFunctions(next) {
 // PAGE TRANSITIONS
 // -----------------------------------------
 
-// function runPageOnceAnimation(next) {
-//   const tl = gsap.timeline();
+function runPageOnceAnimation(next) { // TODO fine tune animation
 
-//   tl.call(() => {
-//     resetPage(next);
-//   }, null, 0);
+  const loaderContainer = next.querySelector('[data-loader-container]');
+  const loader = next.querySelector('[data-loader]');
 
-//   return tl;
-// }
-function runPageOnceAnimation(next) {
   const tl = gsap.timeline();
 
   tl.call(() => {
     resetPage(next);
   }, null, 0);
 
-  tl.to(next, {
+  tl.to(loader, {
+    autoAlpha: 0,
+    duration: 0.25,
+    ease: "linear",
+  }, 0.5)
+  .to(loaderContainer, {
+    autoAlpha: 0,
+    duration: 0.25,
+    ease: "linear",
+  }, 0.75)
+  .set(loaderContainer, {
+    display: "none"
+  }, 1)
+  .to(next, {
     autoAlpha: 1,
-    // duration: 0.75,
-    duration: 5,
-  }, 0.01);
+    duration: 0.25,
+    ease: "linear",
+  }, 1.01);
 
   return tl;
 }
