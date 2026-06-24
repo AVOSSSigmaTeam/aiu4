@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.26";
+const version = "4.0.27";
 console.log("V" + version);
 
 
@@ -106,7 +106,7 @@ function initAfterEnterFunctions(next) {
 // PAGE TRANSITIONS
 // -----------------------------------------
 
-function runPageOnceAnimation(next) { // TODO fine tune animation
+function runPageOnceAnimation(next) {
 
   const loaderContainer = document.querySelector('[data-loader-container]');
   const loader = document.querySelector('[data-loader]');
@@ -1537,6 +1537,65 @@ function initImageAsciiReveal(page) {
 
 //animations
 // TODO init SP service item blob animation
+function initServiceIconBoxBlobAnimation(page) {
+  const serviceIconBoxes = page.querySelectorAll('[data-service-icon-box]');
+  if (serviceIconBoxes.length === 0) return;
+
+  serviceIconBoxes.forEach(box => {
+    const grid = box.querySelector('[data-service-item-grid]');
+    const blobA = box.querySelector('[data-service-item-blob-a]');
+    const blobB = box.querySelector('[data-service-item-blob-b]');
+
+    const tl = gsap.timeline();
+
+    tl.set([blobA, blobB], {
+      opacity: 0,
+      scale: 0.7,
+    })
+    .set(grid, {
+      opacity: .2,
+    })
+    .set(box, {
+      backgroundColor: "var(--colors-interface--dark-2)",
+    });
+
+    tl.to(blobA, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.2,
+      ease: "linear",
+    })
+    .to(grid, {
+      opacity: .6,
+      duration: 0.2,
+      ease: "linear",
+    })
+    .to(box, {
+      backgroundColor: "var(--colors-brand--brand-1)",
+      duration: 0.2,
+      ease: "linear",
+    })
+    .to(blobB, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.2,
+      ease: "linear",
+    }, 0.2);
+
+
+    box.addEventListener("pointerenter", () => {
+      tl.play();
+    });
+
+    box.addEventListener("pointerleave", () => {
+      tl.reverse();
+    });
+
+
+  });
+
+  if (DEBUG) console.log("Service item animation initilized");
+}
 
 // TODO init coming-soon / legal page blob animation
 
@@ -1640,5 +1699,3 @@ function initFadeInFromBottomAnimation(page) {
   });
   // if (DEBUG) console.log("Fade in from bottom animation initialized");
 }
-
-// TODO init first load page fade in animation
