@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.35";
+const version = "4.0.36";
 console.log("V" + version);
 
 
@@ -27,6 +27,8 @@ let durationDefault = 0.6;
 CustomEase.create("default", "0.625, 0.05, 0, 1");
 CustomEase.create("smooth", "M0,0 C0.38,0.005 0.215,1 1,1");
 CustomEase.create("outQuad", "M0,0 C0.25,0.46 0.45,0.94 1,1");
+CustomEase.create("outQuart", "M0,0 C0.165,0.84 0.44,1 1,1");
+CustomEase.create("easeOut", "M0,0 C0,0 0.58,1 1,1");
 gsap.defaults({ ease: "default", duration: durationDefault });
 
 
@@ -70,7 +72,7 @@ function initBeforeEnterFunctions(next) {
 
   if (has('[data-footer]')) setCopyrightYear(nextPage);
 
-  if (has('[data-service-icon-box]')) initServiceIconBoxBlobAnimation(nextPage);
+  // if (has('[data-service-icon-box]')) initServiceIconBoxBlobAnimation(nextPage);
 }
 
 function initAfterEnterFunctions(next) {
@@ -272,6 +274,7 @@ barba.init({
 
       // New page enters
       async enter(data) {
+        initWideHeroSectionAnimation(data.next.container); //TEST
         return runPageEnterAnimation(data.next.container);
       }
     }
@@ -1538,8 +1541,7 @@ function initImageAsciiReveal(page) {
 
 
 //animations
-// TODO init SP service item blob animation
-function initServiceIconBoxBlobAnimation(page) {
+function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, doesn't work propperly
   const serviceIconBoxes = page.querySelectorAll('[data-service-icon-box]');
   if (serviceIconBoxes.length === 0) return;
 
@@ -1730,4 +1732,34 @@ function initFadeInFromBottomAnimation(page) {
 
   });
   // if (DEBUG) console.log("Fade in from bottom animation initialized");
+}
+
+function initWideHeroSectionAnimation(page) {
+  const content = page.querySelector('[data-wide-section-content]');
+  const container = page.querySelector('[data-wide-section-main-container]');
+  if (!content || !container) return;
+
+  gsap.set(content, {
+    opacity: 0,
+  });
+  gsap.set(container, {
+    opacity: 0,
+    yPercent: 10,
+  });
+
+  const tl = gsap.timeline();
+
+  tl.to(content, {
+    opacity: 1,
+    duration: 1,
+    ease: "outQuart",
+  }, 0)
+  .to(container, {
+    opacity: 1,
+    yPercent: 0,
+    duration: 0.2,
+    ease: "easeOut",
+  }, 0.5);
+
+  if (DEBUG) console.log("Wide hero animation initilized");
 }
