@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.33";
+const version = "4.0.34";
 console.log("V" + version);
 
 
@@ -1563,7 +1563,7 @@ function initServiceIconBoxBlobAnimation(page) {
       backgroundColor: "var(--colors-interface--dark-2)",
     });
     
-    const tl = gsap.timeline({ paused: true });
+    const hoverOn = gsap.timeline({ paused: true });
 
     tl.to(blobA, {
       opacity: 1,
@@ -1588,13 +1588,39 @@ function initServiceIconBoxBlobAnimation(page) {
       ease: "smooth",
     }, 0.2);
 
+    
+    const hoverOff = gsap.timeline({ paused: true });
+
+    tl.to(blobA, {
+      opacity: 0,
+      scale: 0.7,
+      duration: 0.2,
+      ease: "smooth",
+    }, 0)
+    .to(blobB, {
+      opacity: 0,
+      scale: 0.7,
+      duration: 0.2,
+      ease: "smooth",
+    }, 0)
+    .to(grid, {
+      opacity: .2,
+      duration: 0.2,
+      ease: "smooth",
+    }, 0)
+    .to(box, {
+      backgroundColor: "var(--colors-interface--dark-2)",
+      duration: 0.2,
+      ease: "smooth",
+    }, 0.2);
+
 
     box.addEventListener("pointerenter", () => {
-      tl.play();
+      hoverOn.play();
     });
 
     box.addEventListener("pointerleave", () => {
-      tl.reverse();
+      hoverOff.play();
     });
 
 
