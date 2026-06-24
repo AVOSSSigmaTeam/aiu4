@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.25";
+const version = "4.0.26";
 console.log("V" + version);
 
 
@@ -108,8 +108,8 @@ function initAfterEnterFunctions(next) {
 
 function runPageOnceAnimation(next) { // TODO fine tune animation
 
-  const loaderContainer = next.querySelector('[data-loader-container]');
-  const loader = next.querySelector('[data-loader]');
+  const loaderContainer = document.querySelector('[data-loader-container]');
+  const loader = document.querySelector('[data-loader]');
 
   const tl = gsap.timeline();
 
