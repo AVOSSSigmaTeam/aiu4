@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.28";
+const version = "4.0.29";
 console.log("V" + version);
 
 
@@ -1548,9 +1548,7 @@ function initServiceIconBoxBlobAnimation(page) {
     const blobA = box.querySelector('[data-service-item-blob-a]');
     const blobB = box.querySelector('[data-service-item-blob-b]');
 
-    const tl = gsap.timeline();
-
-    tl.set([blobA, blobB], {
+    gsap.set([blobA, blobB], {
       opacity: 0,
       scale: 0.7,
     })
@@ -1560,23 +1558,25 @@ function initServiceIconBoxBlobAnimation(page) {
     .set(box, {
       backgroundColor: "var(--colors-interface--dark-2)",
     });
+    
+    const tl = gsap.timeline();
 
     tl.to(blobA, {
       opacity: 1,
       scale: 1,
       duration: 0.2,
       ease: "linear",
-    })
+    }, 0)
     .to(grid, {
       opacity: .6,
       duration: 0.2,
       ease: "linear",
-    })
+    }, 0)
     .to(box, {
       backgroundColor: "var(--colors-brand--brand-1)",
       duration: 0.2,
       ease: "linear",
-    })
+    }, 0)
     .to(blobB, {
       opacity: 1,
       scale: 1,
