@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.34";
+const version = "4.0.35";
 console.log("V" + version);
 
 
@@ -1565,7 +1565,7 @@ function initServiceIconBoxBlobAnimation(page) {
     
     const hoverOn = gsap.timeline({ paused: true });
 
-    tl.to(blobA, {
+    hoverOn.to(blobA, {
       opacity: 1,
       scale: 1,
       duration: 0.2,
@@ -1591,7 +1591,7 @@ function initServiceIconBoxBlobAnimation(page) {
     
     const hoverOff = gsap.timeline({ paused: true });
 
-    tl.to(blobA, {
+    hoverOff.to(blobA, {
       opacity: 0,
       scale: 0.7,
       duration: 0.2,
