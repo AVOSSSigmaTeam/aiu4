@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.29";
+const version = "4.0.30";
 console.log("V" + version);
 
 
@@ -1551,11 +1551,11 @@ function initServiceIconBoxBlobAnimation(page) {
     gsap.set([blobA, blobB], {
       opacity: 0,
       scale: 0.7,
-    })
-    .set(grid, {
+    });
+    gsap.set(grid, {
       opacity: .2,
-    })
-    .set(box, {
+    });
+    gsap.set(box, {
       backgroundColor: "var(--colors-interface--dark-2)",
     });
     
