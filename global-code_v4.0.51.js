@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.50";
+const version = "4.0.51";
 console.log("V" + version);
 
 
@@ -1735,33 +1735,6 @@ function formatDates(page) {
 
 // TODO init blob animations
 
-// function initHorizontalScrollingSectionAnimation(page) { // TODO block animation on tablet and below
-//   const sections = page.querySelectorAll('[data-horizontal-scroll-section]');
-//   if (sections.length === 0) return;
-
-//   sections.forEach(section => {
-//     const row = section.querySelector('[data-scrolling-row]');
-//     if (!row) return;
-
-//     const tl = gsap.timeline({
-//       scrollTrigger: {
-//         trigger: section,
-//         start: "top 25%",
-//         end: "bottom bottom-=35%",
-//         scrub: true,
-//       },
-//     });
-
-//     tl.fromTo(row, {
-//       xPercent: 0
-//     }, {
-//       xPercent: -50,
-//       ease: "linear",
-//     });
-
-//   });
-//   // if (DEBUG) console.log("Horizontal scrolling section animation initialized");
-// }
 function initHorizontalScrollingSectionAnimation(page) {
   const sections = page.querySelectorAll('[data-horizontal-scroll-section]');
   if (sections.length === 0) return;
@@ -1792,28 +1765,26 @@ function initHorizontalScrollingSectionAnimation(page) {
   return mm;
 }
 
+// TODO finish and optimize
 function initFadeInAnimation(page) {
   const targets = page.querySelectorAll('[animate-fade-in]');
   if (targets.length === 0) return;
 
   targets.forEach(target => {
-
     gsap.set(target, {
-      opacity: 0,
+      autoAlpha: 0,
     });
 
-    const tl = gsap.timeline({
+    gsap.to(target, {
+      autoAlpha: 1,
+      duration: 1,
+      delay: 0.5,
       scrollTrigger: {
         trigger: target,
         start: "top bottom",
+        once: true,
       },
     });
-
-    tl.to(target, {
-      opacity: 1,
-      duration: 1,
-    }, 0.5);
-
   });
   // if (DEBUG) console.log("Fade in animation initialized");
 }
@@ -1900,3 +1871,13 @@ function initWideHeroSectionAnimation(page) {
 
   if (DEBUG) console.log("Wide hero animation initilized");
 }
+
+
+
+
+
+
+
+
+// WF
+// TODO check map, not visible on iOS
