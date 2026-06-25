@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.49";
+const version = "4.0.50";
 console.log("V" + version);
 
 
@@ -30,6 +30,12 @@ CustomEase.create("outQuad", "M0,0 C0.25,0.46 0.45,0.94 1,1");
 CustomEase.create("outQuart", "M0,0 C0.165,0.84 0.44,1 1,1");
 CustomEase.create("easeOut", "M0,0 C0,0 0.58,1 1,1");
 gsap.defaults({ ease: "default", duration: durationDefault });
+
+const viewport = {
+  tablet: "991px",
+  mobileHorizontal: "767px",
+  mobileVertical: "479px",
+}
 
 
 
@@ -426,7 +432,8 @@ function isMobileOrTablet() {
   const isTablet = tabletRegex.test(ua);
 
   // Fallback: treat small screens as mobile/tablet
-  const isSmallScreen = window.matchMedia("(max-width: 991px)").matches;
+  // const isSmallScreen = window.matchMedia("(max-width: 991px)").matches;
+  const isSmallScreen = window.matchMedia(`(max-width: ${viewport.tablet})`).matches;
 
   return isMobile || isTablet || isSmallScreen;
 }
@@ -1761,7 +1768,7 @@ function initHorizontalScrollingSectionAnimation(page) {
 
   const mm = gsap.matchMedia();
 
-  mm.add("(min-width: 991px)", () => {
+  mm.add(`(min-width: ${viewport.tablet})`, () => {
     sections.forEach(section => {
       const row = section.querySelector('[data-scrolling-row]');
       if (!row) return;
