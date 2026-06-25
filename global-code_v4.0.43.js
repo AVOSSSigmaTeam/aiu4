@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.42";
+const version = "4.0.43";
 console.log("V" + version);
 
 
@@ -66,7 +66,7 @@ function initBeforeEnterFunctions(next) {
   if (has('[data-marquee]')) initMarquees(nextPage);
 
   if (has('[data-format-date]')) formatDates(nextPage);
-  
+
   if (has('[data-faq-item]')) initFAQ(nextPage);
   if (has('[data-faq-tabs]')) initFAQWraps(nextPage);
 
@@ -97,7 +97,7 @@ function initAfterEnterFunctions(next) {
   if (has('[animate-fade-in]')) initFadeInAnimation(nextPage);
   if (has('[animate-fade-in-from-bottom]')) initFadeInFromBottomAnimation(nextPage);
 
-  
+
   // if (has('[data-wide-section-content]')) initWideHeroSectionAnimation(nextPage); //TEST
 
   if (hasLenis) {
@@ -131,19 +131,19 @@ function runPageOnceAnimation(next) {
     duration: 0.25,
     ease: "linear",
   }, 0.5)
-  .to(loaderContainer, {
-    autoAlpha: 0,
-    duration: 0.25,
-    ease: "linear",
-  }, 0.75)
-  .set(loaderContainer, {
-    display: "none"
-  }, 1)
-  .to(next, {
-    autoAlpha: 1,
-    duration: 0.25,
-    ease: "linear",
-  }, 1.01);
+    .to(loaderContainer, {
+      autoAlpha: 0,
+      duration: 0.25,
+      ease: "linear",
+    }, 0.75)
+    .set(loaderContainer, {
+      display: "none"
+    }, 1)
+    .to(next, {
+      autoAlpha: 1,
+      duration: 0.25,
+      ease: "linear",
+    }, 1.01);
 
   return tl;
 }
@@ -459,16 +459,16 @@ function initHeroAnimation(page) {
     duration: 10,
     ease: 'linear',
   }, 0)
-  .to(content, {
-    scale: 0.75,
-    duration: 4,
-    ease: 'linear',
-  }, 0)
-  .to(content, {
-    opacity: 0,
-    duration: 3,
-    ease: 'linear',
-  }, 1);
+    .to(content, {
+      scale: 0.75,
+      duration: 4,
+      ease: 'linear',
+    }, 0)
+    .to(content, {
+      opacity: 0,
+      duration: 3,
+      ease: 'linear',
+    }, 1);
 
   if (DEBUG) console.log("Hero animation initialized");
 }
@@ -737,7 +737,7 @@ function initFavicons() {
 function initMarquees(page) {
   const marqees = page.querySelectorAll('[data-marquee]');
   if (marqees.length === 0) return;
-  
+
   marqees.forEach(marqee => {
     const groups = marqee.querySelectorAll('[data-marquee-group]');
     if (groups.length === 0) return;
@@ -1480,7 +1480,7 @@ function initImageAsciiReveal(page) {
       //   gallery.querySelectorAll("img[data-aiu-ascii], img.ascii-reveal"),
       gallery.querySelectorAll("img[data-aiu-ascii]"),
     );
-    if (!images.length) { return; } 
+    if (!images.length) { return; }
     // else { console.log(images) }
 
     function start() {
@@ -1569,49 +1569,62 @@ function initElitePopup(page) {
   }
 
   const openPopup = () => {
-      player.play();
 
-      const tl = gsap.timeline();
+    if (DEBUG) {
+      console.log('before muted', player.isMuted?.());
+      console.log('before volume', player.volume?.());
+    }
 
-      tl.set(popup, {
-        top: "0vh",
-        height: "100vh",
-      });
+    player.play();
 
-      tl.to(popup, {
-        // backdropFilter: 'blur(24px)',
-        autoAlpha: 1,
-        duration: 0.4,
-        ease: 'power2.out',
-        // onComplete: () => {
-        //   player.play();
-        // },
-      });
-    };
+    if (DEBUG) {
+      setTimeout(() => {
+        console.log('muted after', player.isMuted?.());
+        console.log('volume after', player.volume?.());
+      }, 500);
+    }
 
-    const closePopup = () => {
-      player.pause();
+    const tl = gsap.timeline();
 
-      const tl = gsap.timeline();
-
-      tl.to(popup, {
-        // backdropFilter: 'blur(0px)',
-        autoAlpha: 0,
-        duration: 0.4,
-        ease: 'power2.inOut',
-      }, 0);
-
-      tl.set(popup, {
-        top: "100vh",
-        height: "0vh",
-      }, 0.4);
-    };
-
-    popupTriggers.forEach(trigger => {
-      trigger.addEventListener('click', openPopup);
+    tl.set(popup, {
+      top: "0vh",
+      height: "100vh",
     });
 
-    background.addEventListener('click', closePopup);
+    tl.to(popup, {
+      backdropFilter: 'blur(24px)',
+      autoAlpha: 1,
+      duration: 0.4,
+      ease: 'power2.out',
+      // onComplete: () => {
+      //   player.play();
+      // },
+    });
+  };
+
+  const closePopup = () => {
+    player.pause();
+
+    const tl = gsap.timeline();
+
+    tl.to(popup, {
+      backdropFilter: 'blur(0px)',
+      autoAlpha: 0,
+      duration: 0.4,
+      ease: 'power2.inOut',
+    }, 0);
+
+    tl.set(popup, {
+      top: "100vh",
+      height: "0vh",
+    }, 0.4);
+  };
+
+  popupTriggers.forEach(trigger => {
+    trigger.addEventListener('click', openPopup);
+  });
+
+  background.addEventListener('click', closePopup);
 
 }
 
@@ -1640,7 +1653,7 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
     gsap.set(box, {
       backgroundColor: "var(--colors-interface--dark-2)",
     });
-    
+
     const hoverOn = gsap.timeline({ paused: true });
 
     hoverOn.to(blobA, {
@@ -1649,24 +1662,24 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
       duration: 0.2,
       ease: "smooth",
     }, 0)
-    .to(grid, {
-      opacity: .6,
-      duration: 0.2,
-      ease: "smooth",
-    }, 0)
-    .to(box, {
-      backgroundColor: "var(--colors-brand--brand-1)",
-      duration: 0.2,
-      ease: "smooth",
-    }, 0)
-    .to(blobB, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.2,
-      ease: "smooth",
-    }, 0.2);
+      .to(grid, {
+        opacity: .6,
+        duration: 0.2,
+        ease: "smooth",
+      }, 0)
+      .to(box, {
+        backgroundColor: "var(--colors-brand--brand-1)",
+        duration: 0.2,
+        ease: "smooth",
+      }, 0)
+      .to(blobB, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.2,
+        ease: "smooth",
+      }, 0.2);
 
-    
+
     const hoverOff = gsap.timeline({ paused: true });
 
     hoverOff.to(blobA, {
@@ -1675,22 +1688,22 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
       duration: 0.2,
       ease: "smooth",
     }, 0)
-    .to(blobB, {
-      opacity: 0,
-      scale: 0.7,
-      duration: 0.2,
-      ease: "smooth",
-    }, 0)
-    .to(grid, {
-      opacity: .2,
-      duration: 0.2,
-      ease: "smooth",
-    }, 0)
-    .to(box, {
-      backgroundColor: "var(--colors-interface--dark-2)",
-      duration: 0.2,
-      ease: "smooth",
-    }, 0.2);
+      .to(blobB, {
+        opacity: 0,
+        scale: 0.7,
+        duration: 0.2,
+        ease: "smooth",
+      }, 0)
+      .to(grid, {
+        opacity: .2,
+        duration: 0.2,
+        ease: "smooth",
+      }, 0)
+      .to(box, {
+        backgroundColor: "var(--colors-interface--dark-2)",
+        duration: 0.2,
+        ease: "smooth",
+      }, 0.2);
 
 
     box.addEventListener("pointerenter", () => {
@@ -1728,7 +1741,7 @@ function formatDates(page) {
 
 // TODO init blob animations
 
-function initHorizontalScrollingSectionAnimation (page) {
+function initHorizontalScrollingSectionAnimation(page) {
   const sections = page.querySelectorAll('[data-horizontal-scroll-section]');
   if (sections.length === 0) return;
 
@@ -1855,12 +1868,12 @@ function initWideHeroSectionAnimation(page) {
     duration: 1,
     ease: "outQuart",
   }, 1.26)
-  .to(container, {
-    opacity: 1,
-    yPercent: 0,
-    duration: 0.2,
-    ease: "easeOut",
-  }, 1.76);
+    .to(container, {
+      opacity: 1,
+      yPercent: 0,
+      duration: 0.2,
+      ease: "easeOut",
+    }, 1.76);
 
   if (DEBUG) console.log("Wide hero animation initilized");
 }
