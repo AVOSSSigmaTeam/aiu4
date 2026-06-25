@@ -1581,10 +1581,12 @@ function initElitePopup(page) {
         autoAlpha: 1,
         duration: 0.4,
         ease: 'power2.out',
-        onComplete: () => {
-          player.play();
-        },
+        // onComplete: () => {
+        //   player.play();
+        // },
       });
+
+      player.play();
     };
 
     const closePopup = () => {
