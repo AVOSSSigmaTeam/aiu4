@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.53";
+const version = "4.0.54";
 console.log("V" + version);
 
 
@@ -1868,14 +1868,18 @@ function initFadeInFromBottomAnimation(page) {
       autoAlpha: 0,
     });
 
-    gsap.to(target, {
-      y: "0rem",
-      autoAlpha: 1,
-      duration: 0.7,
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: target,
         start: "top bottom",
+        once: true,
       },
+    });
+
+    tl.to(target, {
+      y: "0rem",
+      autoAlpha: 1,
+      duration: 0.7,
     }, 0.2);
 
   });
