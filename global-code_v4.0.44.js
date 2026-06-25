@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.43";
+const version = "4.0.44";
 console.log("V" + version);
 
 
@@ -1569,20 +1569,7 @@ function initElitePopup(page) {
   }
 
   const openPopup = () => {
-
-    if (DEBUG) {
-      console.log('before muted', player.isMuted?.());
-      console.log('before volume', player.volume?.());
-    }
-
     player.play();
-
-    if (DEBUG) {
-      setTimeout(() => {
-        console.log('muted after', player.isMuted?.());
-        console.log('volume after', player.volume?.());
-      }, 500);
-    }
 
     const tl = gsap.timeline();
 
@@ -1620,11 +1607,17 @@ function initElitePopup(page) {
     }, 0.4);
   };
 
+  // popupTriggers.forEach(trigger => {
+  //   trigger.addEventListener('click', openPopup);
+  // });
+
+  // background.addEventListener('click', closePopup);
+
   popupTriggers.forEach(trigger => {
-    trigger.addEventListener('click', openPopup);
+    trigger.addEventListener('click', player.play());
   });
 
-  background.addEventListener('click', closePopup);
+  background.addEventListener('click', player.pause());
 
 }
 
