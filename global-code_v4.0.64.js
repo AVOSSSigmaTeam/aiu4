@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.63";
+const version = "4.0.64";
 console.log("V" + version);
 
 
@@ -1839,7 +1839,7 @@ function initWideHeroSectionAnimation(page) {
   const container = page.querySelector('[data-wide-section-main-container]');
   if (!content || !container) return;
 
-  const grid = page.querySelector('[data-wide-section-grid]');
+  // const grid = page.querySelector('[data-wide-section-grid]');
 
   const blobA = page.querySelector('[data-wide-section-blob-a]');
   const blobB = page.querySelector('[data-wide-section-blob-b]');
@@ -1851,11 +1851,11 @@ function initWideHeroSectionAnimation(page) {
     duration: 1,
     ease: "outQuart",
   }, 1.26);
-  gsap.to(grid, {
-    opacity: 0.7,
-    duration: 1,
-    ease: "outQuart",
-  }, 1.27)
+  // gsap.to(grid, {
+  //   opacity: 0.7,
+  //   duration: 1,
+  //   ease: "outQuart",
+  // }, 1.27)
   gsap.to(container, {
     opacity: 1,
     yPercent: 0,
