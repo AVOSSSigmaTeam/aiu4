@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.52";
+const version = "4.0.53";
 console.log("V" + version);
 
 
@@ -1549,8 +1549,6 @@ function initImageAsciiReveal(page) {
 }
 
 // popups
-// TODO add 'X' to the popup
-// TODO init popups
 function initElitePopup(page) {
   const popupTriggers = page.querySelectorAll('[data-show-popup-elite]');
   if (popupTriggers.length === 0) return;
@@ -1835,7 +1833,6 @@ function initHorizontalScrollingSectionAnimation(page) {
   return mm;
 }
 
-// TODO finish and optimize
 function initFadeInAnimation(page) {
   const targets = page.querySelectorAll('[animate-fade-in]');
   if (targets.length === 0) return;
@@ -1868,20 +1865,17 @@ function initFadeInFromBottomAnimation(page) {
 
     gsap.set(target, {
       y: "1.5rem",
-      opacity: 0,
+      autoAlpha: 0,
     });
 
-    const tl = gsap.timeline({
+    gsap.to(target, {
+      y: "0rem",
+      autoAlpha: 1,
+      duration: 0.7,
       scrollTrigger: {
         trigger: target,
         start: "top bottom",
       },
-    });
-
-    tl.to(target, {
-      y: "0rem",
-      opacity: 1,
-      duration: 0.7,
     }, 0.2);
 
   });
