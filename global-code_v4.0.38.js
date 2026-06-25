@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.37";
+const version = "4.0.38";
 console.log("V" + version);
 
 
@@ -61,6 +61,8 @@ function initBeforeEnterFunctions(next) {
   // Runs before the enter animation
   // if (has('[data-something]')) initSomething();
 
+  if (has('[data-elite-popup]')) initElitePopup(nextPage);
+
   if (has('[data-marquee]')) initMarquees(nextPage);
 
   if (has('[data-format-date]')) formatDates(nextPage);
@@ -96,7 +98,7 @@ function initAfterEnterFunctions(next) {
   if (has('[animate-fade-in-from-bottom]')) initFadeInFromBottomAnimation(nextPage);
 
   
-  if (has('[data-wide-section-content]')) initWideHeroSectionAnimation(nextPage); //TEST
+  // if (has('[data-wide-section-content]')) initWideHeroSectionAnimation(nextPage); //TEST
 
   if (hasLenis) {
     lenis.resize();
@@ -1540,6 +1542,35 @@ function initImageAsciiReveal(page) {
 
 // popups
 // TODO init popups
+function initElitePopup(page) {
+  const popupTriggers = page.querySelectorAll('[data-show-popup-elite]');
+  if (popupTriggers.length === 0) return;
+
+  function removeTriggers() {
+    popupTriggers.forEach(trigger => {
+      trigger.remove();
+    });
+  }
+
+  const popup = page.querySelector('[data-elite-popup]');
+  if (!popup) {
+    removeTriggers();
+    return;
+  }
+
+  const player = page.querySelector('[data-popup-video="elite"]');
+  if (!player) {
+    removeTriggers();
+    return;
+  }
+
+  popupTriggers.forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      player.play();
+    });
+  });
+
+}
 
 
 //animations
@@ -1708,6 +1739,7 @@ function initFadeInAnimation(page) {
   // if (DEBUG) console.log("Fade in animation initialized");
 }
 
+// TODO finish and optimize
 function initFadeInFromBottomAnimation(page) {
   const targets = page.querySelectorAll('[animate-fade-in-from-bottom]');
   if (targets.length === 0) return;
@@ -1735,11 +1767,16 @@ function initFadeInFromBottomAnimation(page) {
   });
   // if (DEBUG) console.log("Fade in from bottom animation initialized");
 }
-
+// TODO finish and optimize
 function initWideHeroSectionAnimation(page) {
   const content = page.querySelector('[data-wide-section-content]');
   const container = page.querySelector('[data-wide-section-main-container]');
   if (!content || !container) return;
+
+  const blobA = page.querySelector('[data-wide-section-blob-a]');
+  const blobB = page.querySelector('[data-wide-section-blob-b]');
+  const blobC = page.querySelector('[data-wide-section-blob-c]');
+  if (!blobA || !blobB || !blobC) return;
 
   gsap.set(content, {
     opacity: 0,
@@ -1748,6 +1785,25 @@ function initWideHeroSectionAnimation(page) {
     opacity: 0,
     yPercent: 10,
   });
+  gsap.set(blobA, {
+    opacity: 1,
+    x: "500px",
+    y: "500px",
+    scale: 1.2,
+  });
+  gsap.set(blobB, {
+    opacity: 1,
+    x: "202px",
+    y: "-271px",
+    scale: 1.2,
+  });
+  gsap.set(blobC, {
+    opacity: 1,
+    x: "-39vw",
+    y: "-22vh",
+    scale: 0.7,
+    rotationZ: 15,
+  });
 
   const tl = gsap.timeline();
 
@@ -1755,13 +1811,13 @@ function initWideHeroSectionAnimation(page) {
     opacity: 1,
     duration: 1,
     ease: "outQuart",
-  }, 0)
+  }, 1.26)
   .to(container, {
     opacity: 1,
     yPercent: 0,
     duration: 0.2,
     ease: "easeOut",
-  }, 0.5);
+  }, 1.76);
 
   if (DEBUG) console.log("Wide hero animation initilized");
 }
