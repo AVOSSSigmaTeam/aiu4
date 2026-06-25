@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.56";
+const version = "4.0.57";
 console.log("V" + version);
 
 
@@ -1737,30 +1737,30 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
     }, 0.2);
 
 
-    const hoverOff = gsap.timeline({ paused: true });
+    // const hoverOff = gsap.timeline({ paused: true });
 
-    hoverOff.to(blobA, {
-      opacity: 0,
-      scale: 0.7,
-      duration: 0.2,
-      ease: "smooth",
-    }, 0)
-    .to(blobB, {
-      opacity: 0,
-      scale: 0.7,
-      duration: 0.2,
-      ease: "smooth",
-    }, 0)
-    .to(grid, {
-      opacity: .2,
-      duration: 0.2,
-      ease: "smooth",
-    }, 0)
-    .to(box, {
-      backgroundColor: "var(--colors-interface--dark-2)",
-      duration: 0.2,
-      ease: "smooth",
-    }, 0.2);
+    // hoverOff.to(blobA, {
+    //   opacity: 0,
+    //   scale: 0.7,
+    //   duration: 0.2,
+    //   ease: "smooth",
+    // }, 0)
+    // .to(blobB, {
+    //   opacity: 0,
+    //   scale: 0.7,
+    //   duration: 0.2,
+    //   ease: "smooth",
+    // }, 0)
+    // .to(grid, {
+    //   opacity: .2,
+    //   duration: 0.2,
+    //   ease: "smooth",
+    // }, 0)
+    // .to(box, {
+    //   backgroundColor: "var(--colors-interface--dark-2)",
+    //   duration: 0.2,
+    //   ease: "smooth",
+    // }, 0.2);
 
 
     box.addEventListener("pointerenter", () => {
@@ -1768,7 +1768,8 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
     });
 
     box.addEventListener("pointerleave", () => {
-      hoverOff.play();
+      // hoverOff.play();
+      hoverOn.reverse();
     });
 
 
