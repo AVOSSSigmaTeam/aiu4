@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.55";
+const version = "4.0.56";
 console.log("V" + version);
 
 
@@ -81,7 +81,7 @@ function initBeforeEnterFunctions(next) {
 
   if (has('[data-footer]')) setCopyrightYear(nextPage);
 
-  // if (has('[data-service-icon-box]')) initServiceIconBoxBlobAnimation(nextPage);
+  if (has('[data-service-icon-box]')) initServiceIconBoxBlobAnimation(nextPage);
 }
 
 function initAfterEnterFunctions(next) {
@@ -138,19 +138,14 @@ function runPageOnceAnimation(next) {
     duration: 0.25,
     ease: "linear",
   }, 0.5)
-    .to(loaderContainer, {
-      autoAlpha: 0,
-      duration: 0.25,
-      ease: "linear",
-    }, 0.75)
-    .set(loaderContainer, {
-      display: "none"
-    }, 1);
-    // .to(next, {
-    //   autoAlpha: 1,
-    //   duration: 0.25,
-    //   ease: "linear",
-    // }, 1.01);
+  .to(loaderContainer, {
+    autoAlpha: 0,
+    duration: 0.25,
+    ease: "linear",
+  }, 0.75)
+  .set(loaderContainer, {
+    display: "none"
+  }, 1);
 
   return tl;
 }
@@ -1702,11 +1697,11 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
     const blobB = box.querySelector('[data-service-item-blob-b]');
 
     gsap.set(blobA, {
-      opacity: 0,
+      autoAlpha: 0,
       scale: 0.7,
     });
     gsap.set(blobB, {
-      opacity: 0,
+      autoAlpha: 0,
       scale: 0.7,
     });
     gsap.set(grid, {
@@ -1724,22 +1719,22 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
       duration: 0.2,
       ease: "smooth",
     }, 0)
-      .to(grid, {
-        opacity: .6,
-        duration: 0.2,
-        ease: "smooth",
-      }, 0)
-      .to(box, {
-        backgroundColor: "var(--colors-brand--brand-1)",
-        duration: 0.2,
-        ease: "smooth",
-      }, 0)
-      .to(blobB, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.2,
-        ease: "smooth",
-      }, 0.2);
+    .to(grid, {
+      opacity: .6,
+      duration: 0.2,
+      ease: "smooth",
+    }, 0)
+    .to(box, {
+      backgroundColor: "var(--colors-brand--brand-1)",
+      duration: 0.2,
+      ease: "smooth",
+    }, 0)
+    .to(blobB, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.2,
+      ease: "smooth",
+    }, 0.2);
 
 
     const hoverOff = gsap.timeline({ paused: true });
@@ -1750,22 +1745,22 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
       duration: 0.2,
       ease: "smooth",
     }, 0)
-      .to(blobB, {
-        opacity: 0,
-        scale: 0.7,
-        duration: 0.2,
-        ease: "smooth",
-      }, 0)
-      .to(grid, {
-        opacity: .2,
-        duration: 0.2,
-        ease: "smooth",
-      }, 0)
-      .to(box, {
-        backgroundColor: "var(--colors-interface--dark-2)",
-        duration: 0.2,
-        ease: "smooth",
-      }, 0.2);
+    .to(blobB, {
+      opacity: 0,
+      scale: 0.7,
+      duration: 0.2,
+      ease: "smooth",
+    }, 0)
+    .to(grid, {
+      opacity: .2,
+      duration: 0.2,
+      ease: "smooth",
+    }, 0)
+    .to(box, {
+      backgroundColor: "var(--colors-interface--dark-2)",
+      duration: 0.2,
+      ease: "smooth",
+    }, 0.2);
 
 
     box.addEventListener("pointerenter", () => {
@@ -1782,7 +1777,6 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
   if (DEBUG) console.log("Service item animation initilized");
 }
 
-// TODO init coming-soon / legal page blob animation
 
 function formatDates(page) {
   let dateElements = page.querySelectorAll('[data-format-date]');
@@ -1797,11 +1791,6 @@ function formatDates(page) {
   // if (DEBUG) console.log("Blog post dates initialized");
 }
 
-// TODO init CMS filters (have on NUTRI)
-
-// TODO init button hover animation
-
-// TODO init blob animations
 
 function initHorizontalScrollingSectionAnimation(page) {
   const sections = page.querySelectorAll('[data-horizontal-scroll-section]');
@@ -1856,7 +1845,6 @@ function initFadeInAnimation(page) {
   // if (DEBUG) console.log("Fade in animation initialized");
 }
 
-// TODO finish and optimize
 function initFadeInFromBottomAnimation(page) {
   const targets = page.querySelectorAll('[animate-fade-in-from-bottom]');
   if (targets.length === 0) return;
@@ -1944,7 +1932,13 @@ function initWideHeroSectionAnimation(page) {
 
 
 
+// TODO init coming-soon / legal page blob animation
 
+// TODO init CMS filters (have on NUTRI)
+
+// TODO init button hover animation
+
+// TODO init blob animations
 
 // WF
 // TODO check map, not visible on iOS
