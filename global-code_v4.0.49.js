@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.48";
+const version = "4.0.49";
 console.log("V" + version);
 
 
@@ -1761,7 +1761,7 @@ function initHorizontalScrollingSectionAnimation(page) {
 
   const mm = gsap.matchMedia();
 
-  mm.add("(min-width: 820px)", () => {
+  mm.add("(min-width: 991px)", () => {
     sections.forEach(section => {
       const row = section.querySelector('[data-scrolling-row]');
       if (!row) return;
