@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.38";
+const version = "4.0.39";
 console.log("V" + version);
 
 
@@ -1541,6 +1541,7 @@ function initImageAsciiReveal(page) {
 }
 
 // popups
+// TODO add 'X' to the popup
 // TODO init popups
 function initElitePopup(page) {
   const popupTriggers = page.querySelectorAll('[data-show-popup-elite]');
@@ -1558,17 +1559,57 @@ function initElitePopup(page) {
     return;
   }
 
+  const background = popup.querySelector('[data-popup-background]');
+  if (!background) return;
+
   const player = page.querySelector('[data-popup-video="elite"]');
   if (!player) {
     removeTriggers();
     return;
   }
 
-  popupTriggers.forEach(trigger => {
-    trigger.addEventListener('click', () => {
-      player.play();
+  const openPopup = () => {
+      const tl = gsap.timeline();
+
+      tl.set(popup, {
+        top: "0vh",
+        height: "100vh",
+      });
+
+      tl.to(popup, {
+        backdropFilter: 'blur(24px)',
+        autoAlpha: 1,
+        duration: 0.4,
+        ease: 'power2.out',
+        onComplete: () => {
+          player.play();
+        },
+      });
+    };
+
+    const closePopup = () => {
+      player.pause();
+
+      const tl = gsap.timeline();
+
+      tl.to(popup, {
+        backdropFilter: 'blur(0px)',
+        autoAlpha: 0,
+        duration: 0.4,
+        ease: 'power2.inOut',
+      }, 0);
+
+      tl.set(popup, {
+        top: "100vh",
+        height: "0vh",
+      }, 0.4);
+    };
+
+    popupTriggers.forEach(trigger => {
+      trigger.addEventListener('click', openPopup);
     });
-  });
+
+    background.addEventListener('click', closePopup);
 
 }
 
