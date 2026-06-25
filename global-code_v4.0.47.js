@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.46";
+const version = "4.0.47";
 console.log("V" + version);
 
 
@@ -138,12 +138,12 @@ function runPageOnceAnimation(next) {
     }, 0.75)
     .set(loaderContainer, {
       display: "none"
-    }, 1)
-    .to(next, {
-      autoAlpha: 1,
-      duration: 0.25,
-      ease: "linear",
-    }, 1.01);
+    }, 1);
+    // .to(next, {
+    //   autoAlpha: 1,
+    //   duration: 0.25,
+    //   ease: "linear",
+    // }, 1.01);
 
   return tl;
 }
@@ -1591,14 +1591,14 @@ function initElitePopup(page) {
       autoAlpha: 1,
       duration: 0.4,
       ease: 'power2.out',
-      // onComplete: () => {
-      //   player.play();
-      // },
+      onComplete: () => {
+        player.play();
+      },
     });
   };
 
   const closePopup = () => {
-    // player.pause();
+    player.pause();
 
     const tl = gsap.timeline();
 
@@ -1615,23 +1615,11 @@ function initElitePopup(page) {
     }, 0.4);
   };
 
-  // popupTriggers.forEach(trigger => {
-  //   trigger.addEventListener('click', openPopup);
-  // });
-
-  // background.addEventListener('click', closePopup);
-
   popupTriggers.forEach(trigger => {
-    trigger.addEventListener('click', () => {
-      player.play();
-      // openPopup();
-    });
+    trigger.addEventListener('click', openPopup);
   });
 
-  background.addEventListener('click', () => {
-    player.pause();
-    // closePopup();
-  });
+  background.addEventListener('click', closePopup);
 
 }
 
