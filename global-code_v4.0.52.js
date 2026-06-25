@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.51";
+const version = "4.0.52";
 console.log("V" + version);
 
 
@@ -68,6 +68,7 @@ function initBeforeEnterFunctions(next) {
   // if (has('[data-something]')) initSomething();
 
   if (has('[data-elite-popup]')) initElitePopup(nextPage);
+  if (has('[data-max-popup]')) initMaxPopup(nextPage);
 
   if (has('[data-marquee]')) initMarquees(nextPage);
 
@@ -1576,7 +1577,6 @@ function initElitePopup(page) {
   }
 
   const openPopup = () => {
-    // player.play();
 
     const tl = gsap.timeline();
 
@@ -1590,9 +1590,79 @@ function initElitePopup(page) {
       autoAlpha: 1,
       duration: 0.4,
       ease: 'power2.out',
-      onComplete: () => {
-        player.play();
-      },
+      // onComplete: () => {
+      //   player.play();
+      // },
+    });
+  };
+
+  const closePopup = () => {
+    player.pause();
+
+    const tl = gsap.timeline();
+
+    tl.to(popup, {
+      backdropFilter: 'blur(0px)',
+      autoAlpha: 0,
+      duration: 0.4,
+      ease: 'power2.inOut',
+    }, 0);
+
+    tl.set(popup, {
+      top: "100vh",
+      height: "0vh",
+    }, 0.4);
+  };
+
+  popupTriggers.forEach(trigger => {
+    trigger.addEventListener('click', openPopup);
+  });
+
+  background.addEventListener('click', closePopup);
+
+}
+function initMaxPopup(page) {
+  const popupTriggers = page.querySelectorAll('[data-show-popup-max]');
+  if (popupTriggers.length === 0) return;
+
+  function removeTriggers() {
+    popupTriggers.forEach(trigger => {
+      trigger.remove();
+    });
+  }
+
+  const popup = page.querySelector('[data-max-popup]');
+  if (!popup) {
+    removeTriggers();
+    return;
+  }
+
+  const background = popup.querySelector('[data-popup-background]');
+  if (!background) return;
+
+  const player = page.querySelector('[data-popup-video="max"]');
+  if (!player) {
+    removeTriggers();
+    return;
+  }
+
+  const openPopup = () => {
+
+    const tl = gsap.timeline();
+
+    tl.set(popup, {
+      top: "0vh",
+      height: "100vh",
+    });
+
+    tl.to(popup, {
+      backdropFilter: 'blur(24px)',
+      autoAlpha: 1,
+      duration: 0.4,
+      ease: 'power2.out',
+      // onComplete: () => {
+      //   player.play();
+      // },
     });
   };
 
