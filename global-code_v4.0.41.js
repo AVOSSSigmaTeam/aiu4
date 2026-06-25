@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.39";
+const version = "4.0.41";
 console.log("V" + version);
 
 
@@ -1569,6 +1569,8 @@ function initElitePopup(page) {
   }
 
   const openPopup = () => {
+      player.play();
+
       const tl = gsap.timeline();
 
       tl.set(popup, {
@@ -1585,8 +1587,6 @@ function initElitePopup(page) {
         //   player.play();
         // },
       });
-
-      player.play();
     };
 
     const closePopup = () => {
