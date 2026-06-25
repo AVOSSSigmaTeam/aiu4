@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.41";
+const version = "4.0.42";
 console.log("V" + version);
 
 
@@ -1579,7 +1579,7 @@ function initElitePopup(page) {
       });
 
       tl.to(popup, {
-        backdropFilter: 'blur(24px)',
+        // backdropFilter: 'blur(24px)',
         autoAlpha: 1,
         duration: 0.4,
         ease: 'power2.out',
@@ -1595,7 +1595,7 @@ function initElitePopup(page) {
       const tl = gsap.timeline();
 
       tl.to(popup, {
-        backdropFilter: 'blur(0px)',
+        // backdropFilter: 'blur(0px)',
         autoAlpha: 0,
         duration: 0.4,
         ease: 'power2.inOut',
