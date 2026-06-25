@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.47";
+const version = "4.0.48";
 console.log("V" + version);
 
 
@@ -1567,14 +1567,6 @@ function initElitePopup(page) {
     removeTriggers();
     return;
   }
-  player.addEventListener("mute-change", (event) => {
-    const { isMuted } = event.detail;
-    if (isMuted) {
-      console.log("The video is muted!");
-    } else {
-      console.log("The video is not muted!");
-    }
-  });
 
   const openPopup = () => {
     // player.play();
@@ -1736,32 +1728,61 @@ function formatDates(page) {
 
 // TODO init blob animations
 
+// function initHorizontalScrollingSectionAnimation(page) { // TODO block animation on tablet and below
+//   const sections = page.querySelectorAll('[data-horizontal-scroll-section]');
+//   if (sections.length === 0) return;
+
+//   sections.forEach(section => {
+//     const row = section.querySelector('[data-scrolling-row]');
+//     if (!row) return;
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: section,
+//         start: "top 25%",
+//         end: "bottom bottom-=35%",
+//         scrub: true,
+//       },
+//     });
+
+//     tl.fromTo(row, {
+//       xPercent: 0
+//     }, {
+//       xPercent: -50,
+//       ease: "linear",
+//     });
+
+//   });
+//   // if (DEBUG) console.log("Horizontal scrolling section animation initialized");
+// }
 function initHorizontalScrollingSectionAnimation(page) {
   const sections = page.querySelectorAll('[data-horizontal-scroll-section]');
   if (sections.length === 0) return;
 
-  sections.forEach(section => {
-    const row = section.querySelector('[data-scrolling-row]');
-    if (!row) return;
+  const mm = gsap.matchMedia();
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top 25%",
-        end: "bottom bottom-=35%",
-        scrub: true,
-      },
+  mm.add("(min-width: 820px)", () => {
+    sections.forEach(section => {
+      const row = section.querySelector('[data-scrolling-row]');
+      if (!row) return;
+
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 25%",
+          end: "bottom bottom-=35%",
+          scrub: true,
+        },
+      }).fromTo(row, {
+        xPercent: 0,
+      }, {
+        xPercent: -50,
+        ease: "linear",
+      });
     });
-
-    tl.fromTo(row, {
-      xPercent: 0
-    }, {
-      xPercent: -50,
-      ease: "linear",
-    });
-
   });
-  // if (DEBUG) console.log("Horizontal scrolling section animation initialized");
+
+  return mm;
 }
 
 function initFadeInAnimation(page) {
