@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.45";
+const version = "4.0.46";
 console.log("V" + version);
 
 
@@ -1624,13 +1624,13 @@ function initElitePopup(page) {
   popupTriggers.forEach(trigger => {
     trigger.addEventListener('click', () => {
       player.play();
-      openPopup();
+      // openPopup();
     });
   });
 
   background.addEventListener('click', () => {
     player.pause();
-    closePopup();
+    // closePopup();
   });
 
 }
@@ -1783,7 +1783,7 @@ function initFadeInAnimation(page) {
   targets.forEach(target => {
 
     gsap.set(target, {
-      autoAlpha: 0,
+      opacity: 0,
     });
 
     const tl = gsap.timeline({
@@ -1794,7 +1794,7 @@ function initFadeInAnimation(page) {
     });
 
     tl.to(target, {
-      autoAlpha: 1,
+      opacity: 1,
       duration: 1,
     }, 0.5);
 
@@ -1811,7 +1811,7 @@ function initFadeInFromBottomAnimation(page) {
 
     gsap.set(target, {
       y: "1.5rem",
-      autoAlpha: 0,
+      opacity: 0,
     });
 
     const tl = gsap.timeline({
@@ -1823,7 +1823,7 @@ function initFadeInFromBottomAnimation(page) {
 
     tl.to(target, {
       y: "0rem",
-      autoAlpha: 1,
+      opacity: 1,
       duration: 0.7,
     }, 0.2);
 
