@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.60";
+const version = "4.0.61";
 console.log("V" + version);
 
 
@@ -28,7 +28,10 @@ CustomEase.create("default", "0.625, 0.05, 0, 1");
 CustomEase.create("smooth", "M0,0 C0.38,0.005 0.215,1 1,1");
 CustomEase.create("outQuad", "M0,0 C0.25,0.46 0.45,0.94 1,1");
 CustomEase.create("outQuart", "M0,0 C0.165,0.84 0.44,1 1,1");
+CustomEase.create("ease", "M0,0 C0.25,0.1 0.25,1 1,1");
 CustomEase.create("easeOut", "M0,0 C0,0 0.58,1 1,1");
+CustomEase.create("easeInOut", "M0,0 C0.42,0 0.58,1 1,1");
+CustomEase.create("bounce", "M0,0 C0.03,0 0.08,0.02 0.12,0.08 C0.18,0.2 0.22,0.5 0.28,0.85 C0.32,1.05 0.38,1.12 0.45,1.08 C0.52,1.02 0.6,0.98 0.7,1 C0.8,1.02 0.9,1 1,1");
 gsap.defaults({ ease: "default", duration: durationDefault });
 
 const viewport = {
@@ -1841,14 +1844,12 @@ function initWideHeroSectionAnimation(page) {
   const blobC = page.querySelector('[data-wide-section-blob-c]');
   if (!blobA || !blobB || !blobC) return;
 
-  const tl = gsap.timeline({ repeat: -1, });
-
-  tl.to(content, {
+  gsap.to(content, {
     autoAlpha: 1,
     duration: 1,
     ease: "outQuart",
-  }, 1.26)
-  .to(container, {
+  }, 1.26);
+  gsap.to(container, {
     opacity: 1,
     yPercent: 0,
     duration: 0.2,
@@ -1856,16 +1857,18 @@ function initWideHeroSectionAnimation(page) {
   }, 1.76)
 
 
-  .to(blobA, {
+  const tl = gsap.timeline({ repeat: -1, });
+
+  tl.to(blobA, {
     x: "500px",
     y: "271px",
     duration: 8,
-    ease: "ease", //TODO add ease
+    ease: "ease",
   }, 1.26)
   .to(blobA, {
     opacity: 1,
     duration: 3,
-    ease: "easeOut", //TODO add easeOut
+    ease: "easeOut",
   }, 1.26)
 
   .to(blobB, {
@@ -1930,7 +1933,7 @@ function initWideHeroSectionAnimation(page) {
   .to(blobA, {
     opacity: .93,
     duration: 8,
-    ease: "bounce", //TODO add bounce
+    ease: "bounce",
   }, 9.46)
 
   .to(blobB, {
