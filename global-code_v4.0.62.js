@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.61";
+const version = "4.0.62";
 console.log("V" + version);
 
 
@@ -1845,7 +1845,7 @@ function initWideHeroSectionAnimation(page) {
   if (!blobA || !blobB || !blobC) return;
 
   gsap.to(content, {
-    autoAlpha: 1,
+    opacity: 1,
     duration: 1,
     ease: "outQuart",
   }, 1.26);
