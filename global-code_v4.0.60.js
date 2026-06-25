@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.59";
+const version = "4.0.60";
 console.log("V" + version);
 
 
@@ -105,7 +105,7 @@ function initAfterEnterFunctions(next) {
   if (has('[animate-fade-in-from-bottom]')) initFadeInFromBottomAnimation(nextPage);
 
 
-  // if (has('[data-wide-section-content]')) initWideHeroSectionAnimation(nextPage); //TEST
+  if (has('[data-wide-section-content]')) initWideHeroSectionAnimation(nextPage); //TEST
 
   if (hasLenis) {
     lenis.resize();
@@ -1687,7 +1687,7 @@ function initMaxPopup(page) {
 
 
 //animations
-function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, doesn't work propperly
+function initServiceIconBoxBlobAnimation(page) { 
   const serviceIconBoxes = page.querySelectorAll('[data-service-icon-box]');
   if (serviceIconBoxes.length === 0) return;
 
@@ -1696,22 +1696,7 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
     const blobA = box.querySelector('[data-service-item-blob-a]');
     const blobB = box.querySelector('[data-service-item-blob-b]');
 
-    // gsap.set(blobA, {
-    //   autoAlpha: 0,
-    //   scale: 0.7,
-    // });
-    // gsap.set(blobB, {
-    //   autoAlpha: 0,
-    //   scale: 0.7,
-    // });
-    // gsap.set(grid, {
-    //   opacity: .2,
-    // });
-    // gsap.set(box, {
-    //   backgroundColor: "var(--colors-interface--dark-2)",
-    // });
-
-    const hoverOn = gsap.timeline({ paused: true });
+    const hover = gsap.timeline({ paused: true });
 
     hoverOn.to(blobA, {
       opacity: 1,
@@ -1737,45 +1722,17 @@ function initServiceIconBoxBlobAnimation(page) { // TODO fine tune animation, do
     }, 0.2);
 
 
-    // const hoverOff = gsap.timeline({ paused: true });
-
-    // hoverOff.to(blobA, {
-    //   opacity: 0,
-    //   scale: 0.7,
-    //   duration: 0.2,
-    //   ease: "smooth",
-    // }, 0)
-    // .to(blobB, {
-    //   opacity: 0,
-    //   scale: 0.7,
-    //   duration: 0.2,
-    //   ease: "smooth",
-    // }, 0)
-    // .to(grid, {
-    //   opacity: .2,
-    //   duration: 0.2,
-    //   ease: "smooth",
-    // }, 0)
-    // .to(box, {
-    //   backgroundColor: "var(--colors-interface--dark-2)",
-    //   duration: 0.2,
-    //   ease: "smooth",
-    // }, 0.2);
-
-
     box.addEventListener("pointerenter", () => {
-      hoverOn.play();
+      hover.play();
     });
 
     box.addEventListener("pointerleave", () => {
-      // hoverOff.play();
-      hoverOn.reverse();
+      hover.reverse();
     });
-
 
   });
 
-  if (DEBUG) console.log("Service item animation initilized");
+  // if (DEBUG) console.log("Service item animation initilized");
 }
 
 
@@ -1884,46 +1841,131 @@ function initWideHeroSectionAnimation(page) {
   const blobC = page.querySelector('[data-wide-section-blob-c]');
   if (!blobA || !blobB || !blobC) return;
 
-  gsap.set(content, {
-    opacity: 0,
-  });
-  gsap.set(container, {
-    opacity: 0,
-    yPercent: 10,
-  });
-  gsap.set(blobA, {
-    opacity: 1,
-    x: "500px",
-    y: "500px",
-    scale: 1.2,
-  });
-  gsap.set(blobB, {
-    opacity: 1,
-    x: "202px",
-    y: "-271px",
-    scale: 1.2,
-  });
-  gsap.set(blobC, {
-    opacity: 1,
-    x: "-39vw",
-    y: "-22vh",
-    scale: 0.7,
-    rotationZ: 15,
-  });
-
-  const tl = gsap.timeline();
+  const tl = gsap.timeline({ repeat: -1, });
 
   tl.to(content, {
-    opacity: 1,
+    autoAlpha: 1,
     duration: 1,
     ease: "outQuart",
   }, 1.26)
-    .to(container, {
-      opacity: 1,
-      yPercent: 0,
-      duration: 0.2,
-      ease: "easeOut",
-    }, 1.76);
+  .to(container, {
+    opacity: 1,
+    yPercent: 0,
+    duration: 0.2,
+    ease: "easeOut",
+  }, 1.76)
+
+
+  .to(blobA, {
+    x: "500px",
+    y: "271px",
+    duration: 8,
+    ease: "ease", //TODO add ease
+  }, 1.26)
+  .to(blobA, {
+    opacity: 1,
+    duration: 3,
+    ease: "easeOut", //TODO add easeOut
+  }, 1.26)
+
+  .to(blobB, {
+    x: "202px",
+    y: "279px",
+    duration: 8,
+    ease: "linear",
+  }, 1.26)
+  .to(blobB, {
+    opacity: 1,
+    duration: 2,
+    ease: "easeOut",
+  }, 1.26)
+
+  .to(blobC, {
+    x: "-30vw",
+    y: "-13vh",
+    duration: 5,
+    ease: "linear",
+  }, 1.26)
+  .to(blobC, {
+    scale: 1,
+    duration: 8,
+    ease: "easeInOut",
+  }, 1.26)
+  .to(blobC, {
+    skewX: '15deg',
+    duration: 2,
+    ease: "easeOut",
+  }, 1.26)
+  .to(blobC, {
+    rotationZ: '0deg',
+    duration: 2,
+    ease: "easeOut",
+  }, 1.26)
+
+  .to(blobA, {
+    scale: 1,
+    duration: 8,
+    ease: "easeInOut",
+  }, 1.46)
+
+  .to(blobB, {
+    scale: 1,
+    duration: 8,
+    ease: "easeInOut",
+  }, 1.46)
+
+  .to(blobC, {
+    opacity: 1,
+    duration: 2.5,
+    ease: "easeOut",
+  }, 1.46)
+
+
+  .to(blobA, {
+    x: "-271px",
+    y: "256px",
+    duration: 12,
+    ease: "easeInOut",
+  }, 9.46)
+  .to(blobA, {
+    opacity: .93,
+    duration: 8,
+    ease: "bounce", //TODO add bounce
+  }, 9.46)
+
+  .to(blobB, {
+    x: "-340px",
+    y: "424px",
+    duration: 12,
+    ease: "linear",
+  }, 9.46)
+  .to(blobB, {
+    opacity: .91,
+    duration: 9,
+    ease: "linear",
+  }, 9.46)
+  .to(blobB, {
+    rotationX: '15deg',
+    duration: 12,
+    ease: "bounce",
+  }, 9.46)
+
+  .to(blobC, {
+    x: "16vw",
+    duration: 12,
+    ease: "easeInOut",
+  }, 9.46)
+  .to(blobC, {
+    opacity: .81,
+    duration: 10,
+    ease: "easeInOut",
+  }, 9.46)
+  .to(blobC, {
+    scale: .9,
+    duration: 8,
+    ease: "easeInOut",
+  }, 9.46);
+
 
   if (DEBUG) console.log("Wide hero animation initilized");
 }
