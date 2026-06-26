@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.6";
+const version = "4.1.7";
 console.log("V" + version);
 
 
@@ -2406,6 +2406,18 @@ function setArticleBodyLinksToNofollow(
       }
     });
   });
+}
+
+function filterButtonTest() {
+  const buttons = document.querySelectorAll('[data-filter-button]');
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      if (hasScrollTrigger) {
+        ScrollTrigger.refresh();
+      }
+    })
+  })
 }
 
 
