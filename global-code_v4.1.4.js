@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.3";
+const version = "4.1.4";
 console.log("V" + version);
 
 
@@ -1990,51 +1990,51 @@ function initWideHeroSectionAnimation(page) {
       ease: "easeInOut",
     }, 9.46);
 
-    tl.to(blobA, {
+  tl.to(blobA, {
     x: "500px",
     y: "271px",
     duration: 8,
     ease: "ease",
-  }, 1.26)
-    .to(blobA, {
-      opacity: 1,
-      duration: 3,
-      ease: "easeOut",
-    }, 1.26)
+  })
+  .to(blobA, {
+    opacity: 1,
+    duration: 3,
+    ease: "easeOut",
+  })
 
-    .to(blobB, {
-      x: "202px",
-      y: "279px",
-      duration: 8,
-      ease: "linear",
-    }, 1.26)
-    .to(blobB, {
-      opacity: 1,
-      duration: 2,
-      ease: "easeOut",
-    }, 1.26)
+  .to(blobB, {
+    x: "202px",
+    y: "279px",
+    duration: 8,
+    ease: "linear",
+  })
+  .to(blobB, {
+    opacity: 1,
+    duration: 2,
+    ease: "easeOut",
+  })
 
-    .to(blobC, {
-      x: "-30vw",
-      y: "-13vh",
-      duration: 5,
-      ease: "linear",
-    }, 1.26)
-    .to(blobC, {
-      scale: 1,
-      duration: 8,
-      ease: "easeInOut",
-    }, 1.26)
-    .to(blobC, {
-      skewX: '15deg',
-      duration: 2,
-      ease: "easeOut",
-    }, 1.26)
-    .to(blobC, {
-      rotationZ: '0deg',
-      duration: 2,
-      ease: "easeOut",
-    }, 1.26);
+  .to(blobC, {
+    x: "-30vw",
+    y: "-13vh",
+    duration: 5,
+    ease: "linear",
+  })
+  .to(blobC, {
+    scale: 1,
+    duration: 8,
+    ease: "easeInOut",
+  })
+  .to(blobC, {
+    skewX: '15deg',
+    duration: 2,
+    ease: "easeOut",
+  })
+  .to(blobC, {
+    rotationZ: '0deg',
+    duration: 2,
+    ease: "easeOut",
+  });
 
 
   if (DEBUG) console.log("Wide hero animation initilized");
