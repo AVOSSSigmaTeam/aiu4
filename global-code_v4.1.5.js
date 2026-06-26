@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.4";
+const version = "4.1.5";
 console.log("V" + version);
 
 
@@ -253,22 +253,22 @@ barba.hooks.enter(data => {
   initBarbaNavUpdate(data);
 })
 
-barba.hooks.afterEnter(data => {
+barba.hooks.afterEnter(async data => {
   // Run page functions
   initAfterEnterFunctions(data.next.container);
 
   //Restart Finsweet
-  // if (window.FinsweetAttributes) {
-  //   try {
-  //     await window.FinsweetAttributes.modules.list.restart();
-  //     // await window.FinsweetAttributes.modules.copyclip.restart();
-  //     // await window.FinsweetAttributes.modules.socialshare.restart();
-  //   }
-  //   catch (e) {
-  //     if (DEBUG) console.warn('Finsweet restart error:', e);
-  //   }
-  // }
-  // if (DEBUG) console.log(window.FinsweetAttributes);
+  if (window.FinsweetAttributes) {
+    try {
+      await window.FinsweetAttributes.modules.list.restart();
+      // await window.FinsweetAttributes.modules.copyclip.restart();
+      // await window.FinsweetAttributes.modules.socialshare.restart();
+    }
+    catch (e) {
+      if (DEBUG) console.warn('Finsweet restart error:', e);
+    }
+  }
+  if (DEBUG) console.log(window.FinsweetAttributes);
 
   // Settle
   if (hasLenis) {
@@ -299,6 +299,10 @@ barba.init({
 
       // Current page leaves
       async leave(data) {
+
+        // Restart Webflow IX2 interactions
+        await restartWebflow();
+
         return runPageLeaveAnimation(data.current.container, data.next.container);
       },
 
@@ -1989,52 +1993,6 @@ function initWideHeroSectionAnimation(page) {
       duration: 8,
       ease: "easeInOut",
     }, 9.46);
-
-  tl.to(blobA, {
-    x: "500px",
-    y: "271px",
-    duration: 8,
-    ease: "ease",
-  })
-  .to(blobA, {
-    opacity: 1,
-    duration: 3,
-    ease: "easeOut",
-  })
-
-  .to(blobB, {
-    x: "202px",
-    y: "279px",
-    duration: 8,
-    ease: "linear",
-  })
-  .to(blobB, {
-    opacity: 1,
-    duration: 2,
-    ease: "easeOut",
-  })
-
-  .to(blobC, {
-    x: "-30vw",
-    y: "-13vh",
-    duration: 5,
-    ease: "linear",
-  })
-  .to(blobC, {
-    scale: 1,
-    duration: 8,
-    ease: "easeInOut",
-  })
-  .to(blobC, {
-    skewX: '15deg',
-    duration: 2,
-    ease: "easeOut",
-  })
-  .to(blobC, {
-    rotationZ: '0deg',
-    duration: 2,
-    ease: "easeOut",
-  });
 
 
   if (DEBUG) console.log("Wide hero animation initilized");
