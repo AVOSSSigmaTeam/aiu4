@@ -1,9 +1,11 @@
+import { restartWebflow } from 'https://cdn.jsdelivr.net/npm/@finsweet/ts-utils/+esm';
+
 gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.68";
+const version = "4.1.0";
 console.log("V" + version);
 
 
@@ -40,6 +42,7 @@ const viewport = {
   mobileVertical: "479px",
 }
 
+const articleBodyLinkWhitelist = ["aiuniverzitet.com"];
 
 
 // -----------------------------------------
@@ -70,6 +73,8 @@ function initBeforeEnterFunctions(next) {
   // Runs before the enter animation
   // if (has('[data-something]')) initSomething();
 
+  if (has('[data-animate-button]')) initButtonHoverAnimation(nextPage);
+
   if (has('[data-elite-popup]')) initElitePopup(nextPage);
   if (has('[data-max-popup]')) initMaxPopup(nextPage);
 
@@ -85,6 +90,8 @@ function initBeforeEnterFunctions(next) {
   if (has('[data-footer]')) setCopyrightYear(nextPage);
 
   if (has('[data-service-icon-box]')) initServiceIconBoxBlobAnimation(nextPage);
+
+  if (has('[data-aiu-balkan-map]')) initAnimatedMap();
 }
 
 function initAfterEnterFunctions(next) {
@@ -141,14 +148,14 @@ function runPageOnceAnimation(next) {
     duration: 0.25,
     ease: "linear",
   }, 0.5)
-  .to(loaderContainer, {
-    autoAlpha: 0,
-    duration: 0.25,
-    ease: "linear",
-  }, 0.75)
-  .set(loaderContainer, {
-    display: "none"
-  }, 1);
+    .to(loaderContainer, {
+      autoAlpha: 0,
+      duration: 0.25,
+      ease: "linear",
+    }, 0.75)
+    .set(loaderContainer, {
+      display: "none"
+    }, 1);
 
   return tl;
 }
@@ -249,6 +256,19 @@ barba.hooks.enter(data => {
 barba.hooks.afterEnter(data => {
   // Run page functions
   initAfterEnterFunctions(data.next.container);
+
+  //Restart Finsweet
+  if (window.FinsweetAttributes) {
+    try {
+      await window.FinsweetAttributes.modules.list.restart();
+      // await window.FinsweetAttributes.modules.copyclip.restart();
+      // await window.FinsweetAttributes.modules.socialshare.restart();
+    }
+    catch (e) {
+      if (DEBUG) console.warn('Finsweet restart error:', e);
+    }
+  }
+  if (DEBUG) console.log(window.FinsweetAttributes);
 
   // Settle
   if (hasLenis) {
@@ -990,7 +1010,7 @@ function initFAQWraps(page) {
 }
 
 
-function initCounters(page) {
+function initCounters(page) { // TODO fix, not working when tranisitioning
   const targets = page.querySelectorAll('[data-counter]');
   if (targets.length === 0) return;
   const counterTrigger = page.querySelector('[data-counter-trigger]');
@@ -1690,7 +1710,7 @@ function initMaxPopup(page) {
 
 
 //animations
-function initServiceIconBoxBlobAnimation(page) { 
+function initServiceIconBoxBlobAnimation(page) {
   const serviceIconBoxes = page.querySelectorAll('[data-service-icon-box]');
   if (serviceIconBoxes.length === 0) return;
 
@@ -1707,22 +1727,22 @@ function initServiceIconBoxBlobAnimation(page) {
       duration: 0.2,
       ease: "linear",
     }, 0)
-    .to(grid, {
-      opacity: .6,
-      duration: 0.2,
-      ease: "linear",
-    }, 0)
-    .to(box, {
-      backgroundColor: "var(--colors-brand--brand-1)",
-      duration: 0.2,
-      ease: "linear",
-    }, 0)
-    .to(blobB, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.2,
-      ease: "linear",
-    }, 0.2);
+      .to(grid, {
+        opacity: .6,
+        duration: 0.2,
+        ease: "linear",
+      }, 0)
+      .to(box, {
+        backgroundColor: "var(--colors-brand--brand-1)",
+        duration: 0.2,
+        ease: "linear",
+      }, 0)
+      .to(blobB, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.2,
+        ease: "linear",
+      }, 0.2);
 
 
     box.addEventListener("pointerenter", () => {
@@ -1833,7 +1853,8 @@ function initFadeInFromBottomAnimation(page) {
   });
   // if (DEBUG) console.log("Fade in from bottom animation initialized");
 }
-// TODO finish and optimize
+
+// TODO finish and optimize, section flashes into existance when transitioning from another page, and flashes on repeat
 function initWideHeroSectionAnimation(page) {
   const content = page.querySelector('[data-wide-section-content]');
   const container = page.querySelector('[data-wide-section-main-container]');
@@ -1865,109 +1886,155 @@ function initWideHeroSectionAnimation(page) {
     duration: 8,
     ease: "ease",
   }, 1.26)
-  .to(blobA, {
-    opacity: 1,
-    duration: 3,
-    ease: "easeOut",
-  }, 1.26)
+    .to(blobA, {
+      opacity: 1,
+      duration: 3,
+      ease: "easeOut",
+    }, 1.26)
 
-  .to(blobB, {
-    x: "202px",
-    y: "279px",
+    .to(blobB, {
+      x: "202px",
+      y: "279px",
+      duration: 8,
+      ease: "linear",
+    }, 1.26)
+    .to(blobB, {
+      opacity: 1,
+      duration: 2,
+      ease: "easeOut",
+    }, 1.26)
+
+    .to(blobC, {
+      x: "-30vw",
+      y: "-13vh",
+      duration: 5,
+      ease: "linear",
+    }, 1.26)
+    .to(blobC, {
+      scale: 1,
+      duration: 8,
+      ease: "easeInOut",
+    }, 1.26)
+    .to(blobC, {
+      skewX: '15deg',
+      duration: 2,
+      ease: "easeOut",
+    }, 1.26)
+    .to(blobC, {
+      rotationZ: '0deg',
+      duration: 2,
+      ease: "easeOut",
+    }, 1.26)
+
+    .to(blobA, {
+      scale: 1,
+      duration: 8,
+      ease: "easeInOut",
+    }, 1.46)
+
+    .to(blobB, {
+      scale: 1,
+      duration: 8,
+      ease: "easeInOut",
+    }, 1.46)
+
+    .to(blobC, {
+      opacity: 1,
+      duration: 2.5,
+      ease: "easeOut",
+    }, 1.46)
+
+
+    .to(blobA, {
+      x: "-271px",
+      y: "256px",
+      duration: 12,
+      ease: "easeInOut",
+    }, 9.46)
+    .to(blobA, {
+      opacity: .93,
+      duration: 8,
+      ease: "bounce",
+    }, 9.46)
+
+    .to(blobB, {
+      x: "-340px",
+      y: "424px",
+      duration: 12,
+      ease: "linear",
+    }, 9.46)
+    .to(blobB, {
+      opacity: .91,
+      duration: 9,
+      ease: "linear",
+    }, 9.46)
+    .to(blobB, {
+      rotationX: '15deg',
+      duration: 12,
+      ease: "bounce",
+    }, 9.46)
+
+    .to(blobC, {
+      x: "16vw",
+      duration: 12,
+      ease: "easeInOut",
+    }, 9.46)
+    .to(blobC, {
+      opacity: .81,
+      duration: 10,
+      ease: "easeInOut",
+    }, 9.46)
+    .to(blobC, {
+      scale: .9,
+      duration: 8,
+      ease: "easeInOut",
+    }, 9.46);
+
+    tl.to(blobA, {
+    x: "500px",
+    y: "271px",
     duration: 8,
-    ease: "linear",
+    ease: "ease",
   }, 1.26)
-  .to(blobB, {
-    opacity: 1,
-    duration: 2,
-    ease: "easeOut",
-  }, 1.26)
+    .to(blobA, {
+      opacity: 1,
+      duration: 3,
+      ease: "easeOut",
+    }, 1.26)
 
-  .to(blobC, {
-    x: "-30vw",
-    y: "-13vh",
-    duration: 5,
-    ease: "linear",
-  }, 1.26)
-  .to(blobC, {
-    scale: 1,
-    duration: 8,
-    ease: "easeInOut",
-  }, 1.26)
-  .to(blobC, {
-    skewX: '15deg',
-    duration: 2,
-    ease: "easeOut",
-  }, 1.26)
-  .to(blobC, {
-    rotationZ: '0deg',
-    duration: 2,
-    ease: "easeOut",
-  }, 1.26)
+    .to(blobB, {
+      x: "202px",
+      y: "279px",
+      duration: 8,
+      ease: "linear",
+    }, 1.26)
+    .to(blobB, {
+      opacity: 1,
+      duration: 2,
+      ease: "easeOut",
+    }, 1.26)
 
-  .to(blobA, {
-    scale: 1,
-    duration: 8,
-    ease: "easeInOut",
-  }, 1.46)
-
-  .to(blobB, {
-    scale: 1,
-    duration: 8,
-    ease: "easeInOut",
-  }, 1.46)
-
-  .to(blobC, {
-    opacity: 1,
-    duration: 2.5,
-    ease: "easeOut",
-  }, 1.46)
-
-
-  .to(blobA, {
-    x: "-271px",
-    y: "256px",
-    duration: 12,
-    ease: "easeInOut",
-  }, 9.46)
-  .to(blobA, {
-    opacity: .93,
-    duration: 8,
-    ease: "bounce",
-  }, 9.46)
-
-  .to(blobB, {
-    x: "-340px",
-    y: "424px",
-    duration: 12,
-    ease: "linear",
-  }, 9.46)
-  .to(blobB, {
-    opacity: .91,
-    duration: 9,
-    ease: "linear",
-  }, 9.46)
-  .to(blobB, {
-    rotationX: '15deg',
-    duration: 12,
-    ease: "bounce",
-  }, 9.46)
-
-  .to(blobC, {
-    x: "16vw",
-    duration: 12,
-    ease: "easeInOut",
-  }, 9.46)
-  .to(blobC, {
-    opacity: .81,
-    duration: 10,
-    ease: "easeInOut",
-  }, 9.46)
-  .to(blobC, {
-    scale: .9,
-    duration: 8,
-    ease: "easeInOut",
-  }, 9.46);
+    .to(blobC, {
+      x: "-30vw",
+      y: "-13vh",
+      duration: 5,
+      ease: "linear",
+    }, 1.26)
+    .to(blobC, {
+      scale: 1,
+      duration: 8,
+      ease: "easeInOut",
+    }, 1.26)
+    .to(blobC, {
+      skewX: '15deg',
+      duration: 2,
+      ease: "easeOut",
+    }, 1.26)
+    .to(blobC, {
+      rotationZ: '0deg',
+      duration: 2,
+      ease: "easeOut",
+    }, 1.26);
 
 
   if (DEBUG) console.log("Wide hero animation initilized");
@@ -2005,7 +2072,377 @@ function initButtonHoverAnimation(page) {
 }
 
 
+function initAnimatedMap(page = document) {
+  var ys = "22.11,30.21,38.32,46.42,54.53,62.64,70.74,78.85,86.95,95.06,103.17,111.27,119.38,127.48,135.59,143.7,151.8,159.91,168.01,176.12,184.23,192.33,200.44,208.54,216.65,224.76,232.86,240.97,249.07,257.18,265.29,273.39,281.5,289.6,297.71,305.82,313.92,322.03,330.13,338.24,346.35,354.45,362.56,370.66,378.77,386.88,394.98,403.09,411.19,419.3,427.41,435.51,443.62,451.72,459.83,467.94,476.04,484.15,492.25,500.36,508.47,516.57,524.68,532.78,540.89,549,557.1,565.21,573.31,581.42,589.53,597.63,605.74,613.84,621.95,630.06,638.16".split(',').map(Number);
+  var rows = "d,f;c,e,g,i;d,f,h,j,l,r,t;e,g,i,k,m,o,q,s,u,w;b,d,f,h,j,l,n,p,r,t,v,x;6,8,a,c,e,g,i,k,m,o,q,s,u,w,y;5,7,9,b,d,f,h,j,l,n,p,r,t,v,x,z;6,8,a,c,e,g,i,k,m,o,q,s,u,w,y;5,7,9,b,d,f,h,j,l,n,p,r,t,v,x,z;4,6,8,a,c,e,g,i,k,m,o,q,s,u,w,y,10;5,7,9,b,d,f,h,j,l,n,p,r,t,v,x,z,11;4,6,8,a,c,e,g,i,k,m,o,q,s,u,w,y,10;1,3,5,7,9,b,d,f,h,j,l,n,p,r,t,v,x,z,11;0,2,4,6,8,a,c,e,g,i,k,m,o,q,s,u,w,y,10,12;1,3,5,7,9,b,d,f,h,j,l,n,p,r,t,v,x,z,11,13;0,2,4,6,8,a,c,e,g,i,k,m,o,q,s,u,w,y,10,12;1,3,5,7,9,b,d,f,h,j,l,n,p,r,t,v,x;0,2,4,6,8,a,c,e,g,i,k,m,o,q,s,u;1,3,5,7,9,b,d,f,h,j,l,n,p,r,t;0,2,4,6,8,a,c,e,g,i,k,m,o,q;1,3,5,7,9,b,d,f,h,j,l,n,p,r;0,2,4,6,8,a,c,e,g,i,k,m,o,q,s;1,3,5,7,9,b,d,f,h,j,l,n,p,r,t,2p;4,6,8,a,c,e,g,i,k,m,o,q,s,u,w,2m,2o,2q;9,b,d,f,h,j,l,n,p,r,t,v,x,15,17,1v,1x,1z,21,23,2j,2l,2n,2p,2r,2t;8,a,c,e,g,i,k,m,o,q,s,u,w,y,10,14,16,18,1a,1c,1e,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u;7,9,b,d,f,h,j,l,n,p,r,t,v,x,z,11,13,15,17,19,1b,1d,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v;6,8,a,c,e,g,i,k,m,o,q,s,u,w,y,10,12,14,16,18,1a,1c,1e,1g,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w;7,9,b,d,f,h,j,l,n,p,r,t,v,x,z,11,13,15,17,19,1b,1d,1f,1h,1j,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x;6,8,c,e,g,i,k,m,o,q,s,u,w,y,10,12,14,16,18,1a,1c,1e,1g,1i,1k,1m,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y;h,j,l,n,p,r,t,v,x,z,11,13,15,17,19,1b,1d,1f,1h,1j,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x;g,i,k,m,o,q,s,u,w,y,10,12,14,16,18,1a,1c,1e,1g,1i,1k,1m,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y;h,j,l,n,p,r,t,v,x,z,11,13,15,17,19,1b,1d,1f,1h,1j,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x,2z,31,35,37;k,m,o,q,s,u,w,y,10,12,14,16,18,1a,1c,1e,1g,1i,1k,1m,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y,30,32,34,36;l,n,p,r,t,v,x,z,11,13,15,17,19,1b,1d,1f,1h,1j,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x,2z,31,33;e,g,i,k,m,o,q,s,u,w,y,10,12,14,16,18,1a,1c,1e,1g,1i,1k,1m,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y,30,32,34;9,d,f,h,j,l,n,p,r,t,v,x,z,11,13,15,17,19,1b,1d,1f,1h,1j,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x,2z,31,33;2,6,8,a,c,e,g,i,k,m,o,q,s,u,w,y,10,12,14,16,18,1a,1c,1e,1g,1i,1k,1m,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y,30,32,34;3,5,7,9,b,d,f,h,j,l,n,p,r,t,11,13,15,17,19,1b,1d,1f,1h,1j,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x,2z,31,33;4,6,8,a,c,e,g,i,k,m,o,q,s,10,12,14,16,18,1a,1c,1e,1g,1i,1k,1m,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y,30,32,34;1,3,5,7,9,b,d,f,h,j,l,n,p,r,t,11,17,19,1b,1d,1f,1h,1j,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x,2z,31,33;2,4,6,8,a,c,e,g,i,k,m,o,q,s,18,1a,1c,1e,1g,1i,1k,1m,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y,30,32;3,5,7,9,b,d,f,h,j,l,n,p,r,19,1b,1d,1f,1h,1j,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x,2z,31;2,4,6,8,a,c,e,g,i,k,m,o,q,s,1a,1c,1e,1g,1i,1k,1m,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y,30,32;5,7,f,h,j,l,n,p,r,t,1b,1d,1f,1h,1j,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x,2z,31;6,k,m,o,q,s,u,w,1c,1e,1g,1i,1k,1m,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y,30,32;j,l,n,p,r,t,v,x,z,1f,1h,1j,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x,2z,31,33;k,m,o,q,s,u,w,y,10,1k,1m,1o,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y;l,n,p,r,t,v,x,z,11,1l,1n,1p,1r,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v;m,o,q,s,u,w,y,10,12,1q,1s,1u,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w,2y;n,p,r,t,v,x,z,11,13,1t,1v,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x;o,q,s,u,w,y,10,12,14,1w,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o,2q,2s,2u,2w;p,r,t,v,x,z,11,13,15,17,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n,2p,2r,2t,2v,2x;s,u,w,y,10,12,14,16,18,1a,1c,1e,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k,2m,2o;t,v,x,z,11,13,15,17,19,1b,1d,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l;w,y,10,12,14,16,18,1a,1c,1e,1g,1y,20,22,24,26,28,2a,2c,2e,2g,2i,2k;13,15,17,19,1b,1d,1f,1h,1j,1l,1x,1z,21,23,25,27,29,2b,2d,2f,2h,2j,2l,2n;c,14,16,18,1a,1c,1e,1g,1i,1k,1m,1o,1y,20,22,24,26,28,2a,2c,2e,2i,2k,2m;9,b,d,f,17,19,1b,1d,1f,1h,1j,1l,1n,1p,1r,1z,21,23,25,27,29,2b,2d,2f;a,c,e,g,1a,1c,1e,1g,1i,1q,1s,20,22,24,26,28,2a,2c,2e,2g;9,b,d,f,1b,1d,1f,1h,1r,21,23,25,27,29,2b,2d,2f,2h;a,c,e,1c,1e,1g,24,26,28,2a,2c,2e,2g,2i;9,b,d,f,1d,1f,1h,1j,25,27,29,2b,2d,2f,2h;a,c,e,1e,1g,1i,1k,26,28,2a,2c,2e,2g,2i,2k;9,b,d,f,1h,1j,1l,27,29,2b,2d,2f,2h,2j,2l,2n;a,1g,1i,28,2a,2c,2e,2g,2i,2k,2m,2o;1f,1h,29,2b,2d,2f,2h,2j,2l,2n,2p;1e,1g,2a,2c,2e,2g,2i,2k;1b,1f,2b,2d,2f,2h,2j,2l;w,y,10,12,14,16,18,1a,1c,2c,2e,2g,2i;x,z,11,13,15,17,19,1b,2d,2f,2h,2j;y,10,12,14,16,18,1a,2e,2g,2i,2k;11,13,15,17,19,1b,2h,2j,2l;18,1a;1b;2q,2y,30,32,34;2r,2t,2v,2x,2z,31,33".split(';');
+  var VIEW_W = 576;
+  var VIEW_H = 661;
+  var DOT_R = 1.31045;
 
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  function eachRange(row, cb) {
+    if (!row) return;
+    row.split(',').forEach(function (part) {
+      var pair = part.split('-');
+      var start = parseInt(pair[0], 36);
+      var end = pair[1] ? parseInt(pair[1], 36) : start;
+      for (var x = start; x <= end; x++) cb(x);
+    });
+  }
+
+  function shader(gl, type, source) {
+    var s = gl.createShader(type);
+    gl.shaderSource(s, source);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      console.warn(gl.getShaderInfoLog(s));
+      return null;
+    }
+    return s;
+  }
+
+  function program(gl, vertexSource, fragmentSource) {
+    var vs = shader(gl, gl.VERTEX_SHADER, vertexSource);
+    var fs = shader(gl, gl.FRAGMENT_SHADER, fragmentSource);
+    if (!vs || !fs) return null;
+
+    var p = gl.createProgram();
+    gl.attachShader(p, vs);
+    gl.attachShader(p, fs);
+    gl.linkProgram(p);
+
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+      console.warn(gl.getProgramInfoLog(p));
+      return null;
+    }
+
+    return p;
+  }
+
+  function parseColor(value) {
+    value = String(value || '').trim();
+    if (!value || value.indexOf('var(') === 0) return null;
+
+    if (value.charAt(0) === '#') {
+      var hex = value.slice(1);
+      if (hex.length === 3 || hex.length === 4) {
+        hex = hex.split('').map(function (char) { return char + char; }).join('');
+      }
+      if (hex.length === 6 || hex.length === 8) {
+        var intValue = parseInt(hex, 16);
+        if (!isNaN(intValue)) {
+          return [
+            ((intValue >> (hex.length === 8 ? 24 : 16)) & 255) / 255,
+            ((intValue >> (hex.length === 8 ? 16 : 8)) & 255) / 255,
+            ((intValue >> (hex.length === 8 ? 8 : 0)) & 255) / 255,
+            hex.length === 8 ? (intValue & 255) / 255 : 1
+          ];
+        }
+      }
+    }
+
+    var m = value.match(/rgba?\(([^)]+)\)/i);
+    if (!m) return null;
+
+    var parts = m[1].split(/[,\s/]+/).filter(Boolean).map(Number);
+    return [
+      (parts[0] || 255) / 255,
+      (parts[1] || 255) / 255,
+      (parts[2] || 255) / 255,
+      parts.length > 3 ? parts[3] : 1
+    ];
+  }
+
+  function readColor(computed, props, fallback) {
+    for (var i = 0; i < props.length; i++) {
+      var color = parseColor(computed.getPropertyValue(props[i]));
+      if (color) return color;
+    }
+
+    return parseColor(fallback) || [1, 1, 1, 1];
+  }
+
+  var vertexSource = `
+attribute vec2 a_pos;
+attribute float a_opacity;
+attribute float a_kind;
+attribute float a_delay;
+attribute float a_speed;
+
+uniform vec2 u_canvasSize;
+uniform vec2 u_offset;
+uniform float u_scale;
+uniform float u_pointSize;
+uniform float u_time;
+
+varying float v_alpha;
+varying float v_wave;
+varying float v_star;
+
+void main(){
+  float xNorm = a_pos.x / 576.0;
+  float yNorm = a_pos.y / 661.0;
+
+  float phase = ((u_time / max(a_speed, 0.001)) + a_delay) * 6.28318530718;
+  float micro = 0.5 + 0.5 * sin(phase);
+  float wavePhase = fract(u_time * 0.28 - yNorm * 1.18 + xNorm * 0.14 + a_delay * 0.025);
+  float wave = smoothstep(0.025, 0.16, wavePhase) * (1.0 - smoothstep(0.16, 0.34, wavePhase));
+  float sparkle = 0.0;
+
+  if(a_kind > 0.5){
+    sparkle = pow(max(0.0, micro), 18.0);
+  }
+
+  float alpha = a_opacity * (1.08 + micro * 0.05) + wave * 0.25 + sparkle * 0.46;
+  float size = u_pointSize;
+
+  size *= 1.0 + wave * 0.18 + sparkle * 0.54;
+
+  vec2 pixel = a_pos * u_scale + u_offset;
+  vec2 clip = vec2(
+    pixel.x / u_canvasSize.x * 2.0 - 1.0,
+    1.0 - pixel.y / u_canvasSize.y * 2.0
+  );
+
+  v_alpha = alpha;
+  v_wave = wave;
+  v_star = sparkle * a_kind;
+  gl_Position = vec4(clip, 0.0, 1.0);
+  gl_PointSize = max(1.0, size);
+}
+`;
+
+
+  var fragmentSource = `
+precision mediump float;
+
+uniform vec4 u_color;
+uniform vec4 u_glowColor;
+uniform vec4 u_starColor;
+varying float v_alpha;
+varying float v_wave;
+varying float v_star;
+
+void main(){
+  vec2 p = gl_PointCoord * 2.0 - 1.0;
+  float r = length(p);
+  float body = 1.0 - smoothstep(0.42, 0.78, r);
+  float core = 1.0 - smoothstep(0.02, 0.34, r);
+  float halo = (1.0 - smoothstep(0.16, 1.0, r)) * (0.32 + v_wave * 0.38);
+  float crossX = (1.0 - smoothstep(0.00, 0.075, abs(p.y))) * (1.0 - smoothstep(0.12, 0.95, abs(p.x)));
+  float crossY = (1.0 - smoothstep(0.00, 0.075, abs(p.x))) * (1.0 - smoothstep(0.12, 0.95, abs(p.y)));
+  float starlight = (crossX + crossY) * v_star * 0.22;
+  float alpha = v_alpha * (body + core * 0.22 + halo) + starlight;
+
+  if(alpha <= 0.004) discard;
+
+  vec3 color = mix(u_color.rgb, u_glowColor.rgb, clamp(v_wave * 0.88, 0.0, 1.0));
+  color = mix(color, u_starColor.rgb, clamp(v_star * 0.82 + core * 0.08, 0.0, 1.0));
+
+  gl_FragColor = vec4(color, min(alpha, 1.0) * u_color.a);
+}
+`;
+
+
+  ready(function () {
+    document.querySelectorAll('[data-aiu-balkan-map]').forEach(function (host) {
+      if (host.getAttribute('data-aiu-ready') === '1') return;
+      host.setAttribute('data-aiu-ready', '1');
+
+      var canvas = document.createElement('canvas');
+      canvas.width = VIEW_W;
+      canvas.height = VIEW_H;
+      canvas.style.display = 'block';
+      canvas.style.width = '100%';
+      canvas.style.height = 'auto';
+      canvas.style.aspectRatio = VIEW_W + ' / ' + VIEW_H;
+
+      host.replaceChildren(canvas);
+
+      var gl = canvas.getContext('webgl', {
+        alpha: true,
+        antialias: true,
+        depth: false,
+        stencil: false,
+        powerPreference: 'high-performance'
+      });
+
+      if (!gl) return;
+
+      var p = program(gl, vertexSource, fragmentSource);
+      if (!p) return;
+
+      var data = [];
+      var index = 0;
+
+      rows.forEach(function (row, rowIndex) {
+        var cy = ys[rowIndex];
+
+        eachRange(row, function (xIndex) {
+          var cx = 18.72 + xIndex * 4.68;
+          var seed = ((index * 9301 + 49297) % 233280) / 233280;
+          var baseOpacity = 0.40 + seed * 0.18;
+          var verticalProgress = cy / VIEW_H;
+          var horizontalDrift = cx / VIEW_W;
+          var kind = ((index + 11) % 17 === 0 || seed > 0.965) ? 1 : 0;
+          var delay = seed * 5.7 + verticalProgress * 2.8 + horizontalDrift * 0.9;
+          var speed = 4.4 + seed * 3.4;
+
+          data.push(cx, cy, baseOpacity, kind, delay, speed);
+          index++;
+        });
+      });
+
+      var buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+
+      gl.useProgram(p);
+
+      var stride = 6 * 4;
+
+      function attr(name, size, offset) {
+        var loc = gl.getAttribLocation(p, name);
+        gl.enableVertexAttribArray(loc);
+        gl.vertexAttribPointer(loc, size, gl.FLOAT, false, stride, offset);
+      }
+
+      attr('a_pos', 2, 0);
+      attr('a_opacity', 1, 2 * 4);
+      attr('a_kind', 1, 3 * 4);
+      attr('a_delay', 1, 4 * 4);
+      attr('a_speed', 1, 5 * 4);
+
+      var uCanvasSize = gl.getUniformLocation(p, 'u_canvasSize');
+      var uOffset = gl.getUniformLocation(p, 'u_offset');
+      var uScale = gl.getUniformLocation(p, 'u_scale');
+      var uPointSize = gl.getUniformLocation(p, 'u_pointSize');
+      var uTime = gl.getUniformLocation(p, 'u_time');
+      var uColor = gl.getUniformLocation(p, 'u_color');
+      var uGlowColor = gl.getUniformLocation(p, 'u_glowColor');
+      var uStarColor = gl.getUniformLocation(p, 'u_starColor');
+
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+      gl.clearColor(0, 0, 0, 0);
+
+      var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var isVisible = true;
+      var isRunning = false;
+
+      function queueDraw() {
+        if (isRunning) return;
+        isRunning = true;
+        requestAnimationFrame(draw);
+      }
+
+      function draw(now) {
+        isRunning = false;
+        if (!host.isConnected) return;
+
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var rect = canvas.getBoundingClientRect();
+        var width = Math.max(1, Math.round(rect.width * dpr));
+        var height = Math.max(1, Math.round(rect.height * dpr));
+
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width;
+          canvas.height = height;
+          gl.viewport(0, 0, width, height);
+        }
+
+        var scale = Math.min(width / VIEW_W, height / VIEW_H);
+        var offsetX = (width - VIEW_W * scale) * 0.5;
+        var offsetY = (height - VIEW_H * scale) * 0.5;
+
+        var computed = getComputedStyle(host);
+        var color = readColor(computed, ['--aiu-map-dot-color', '--colors-brand--brand-4'], computed.color || '#5adfff');
+        var glowColor = readColor(computed, ['--aiu-map-glow-color', '--colors-brand--brand-3'], '#00adef');
+        var starColor = readColor(computed, ['--aiu-map-star-color', '--colors-interface--white'], '#ffffff');
+
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.uniform2f(uCanvasSize, width, height);
+        gl.uniform2f(uOffset, offsetX, offsetY);
+        gl.uniform1f(uScale, scale);
+        gl.uniform1f(uPointSize, DOT_R * 2 * scale);
+        gl.uniform1f(uTime, now * 0.001);
+        gl.uniform4f(uColor, color[0], color[1], color[2], color[3]);
+        gl.uniform4f(uGlowColor, glowColor[0], glowColor[1], glowColor[2], glowColor[3]);
+        gl.uniform4f(uStarColor, starColor[0], starColor[1], starColor[2], starColor[3]);
+
+        gl.drawArrays(gl.POINTS, 0, data.length / 6);
+
+        if (isVisible && !reduceMotion && document.visibilityState !== 'hidden') {
+          queueDraw();
+        }
+      }
+
+      if ('IntersectionObserver' in window) {
+        isVisible = false;
+        var observer = new IntersectionObserver(function (entries) {
+          isVisible = entries[0] && entries[0].isIntersecting;
+          if (isVisible) queueDraw();
+        }, { rootMargin: '160px 0px' });
+        observer.observe(host);
+      }
+
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState !== 'hidden' && isVisible) queueDraw();
+      });
+
+      queueDraw();
+    });
+  });
+}
+
+/**
+ * Adds nofollow attribute to links in article bodies.
+ * @param {Document|HTMLElement} page - The page or container to process.
+ * @param {Array<string>} whitelistedDomains - Domains to exclude from nofollow (e.g. example.com). Subdomains are automatically included (e.g. sub.example.com). Case-insensitive.
+ */
+function setArticleBodyLinksToNofollow(
+  page,
+  whitelistedDomains = []
+) {
+  const normalizedWhitelist = whitelistedDomains.map((domain) =>
+    domain.toLowerCase()
+  );
+
+  const isWhitelisted = (hostname) => {
+    const normalizedHostname = hostname.toLowerCase();
+
+    return normalizedWhitelist.some(
+      (domain) =>
+        normalizedHostname === domain ||
+        normalizedHostname.endsWith(`.${domain}`)
+    );
+  };
+
+  const articleBodies = page.querySelectorAll('[data-article-body]');
+
+  articleBodies.forEach((body) => {
+    const links = body.querySelectorAll('a[href]');
+
+    links.forEach((link) => {
+      try {
+        const url = new URL(link.href, window.location.origin);
+
+        if (!isWhitelisted(url.hostname)) {
+          link.setAttribute('rel', 'nofollow');
+        }
+      } catch {
+        // Ignore invalid URLs
+      }
+    });
+  });
+}
 
 
 // TODO init coming-soon / legal page blob animation
@@ -2016,6 +2453,7 @@ function initButtonHoverAnimation(page) {
 
 // TODO init blob animations
 
+// TODO glitter map not working on transition
 
 // WF
 // TODO check map, not visible on iOS
