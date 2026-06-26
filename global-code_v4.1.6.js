@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.5";
+const version = "4.1.6";
 console.log("V" + version);
 
 
@@ -1845,6 +1845,7 @@ function initFadeInFromBottomAnimation(page) {
       scrollTrigger: {
         trigger: target,
         start: "top bottom",
+        markers: DEBUG,
       },
     });
 
@@ -2409,8 +2410,6 @@ function setArticleBodyLinksToNofollow(
 
 
 // TODO init coming-soon / legal page blob animation
-
-// TODO init CMS filters (have on NUTRI)
 
 // TODO init button hover animation
 
