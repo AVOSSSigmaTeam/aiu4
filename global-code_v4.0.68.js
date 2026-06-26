@@ -3,7 +3,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.0.67";
+const version = "4.0.68";
 console.log("V" + version);
 
 
@@ -1973,6 +1973,36 @@ function initWideHeroSectionAnimation(page) {
   if (DEBUG) console.log("Wide hero animation initilized");
 }
 
+function initButtonHoverAnimation(page) {
+  const buttons = page.querySelectorAll('[data-animate-button]');
+  if (buttons.length === 0) return;
+
+  buttons.forEach(button => {
+    const buttonTextElements = button.querySelectorAll('[data-button-text]');
+    if (buttonTextElements.length === 0) return;
+
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo(buttonTextElements, {
+      yPercent: 0,
+    }, {
+      yPercent: -100,
+      duration: 0.2,
+      ease: "easeOut"
+    });
+
+    button.addEventListener("pointerenter", () => {
+      tl.play();
+    });
+
+    button.addEventListener("pointerleave", () => {
+      tl.reverse();
+    });
+
+  });
+
+  if (DEBUG) console.log("Button animation initialized for: " + buttons.length);
+}
 
 
 
@@ -1985,6 +2015,7 @@ function initWideHeroSectionAnimation(page) {
 // TODO init button hover animation
 
 // TODO init blob animations
+
 
 // WF
 // TODO check map, not visible on iOS
