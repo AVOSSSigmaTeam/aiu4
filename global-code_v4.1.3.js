@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.2";
+const version = "4.1.3";
 console.log("V" + version);
 
 
@@ -2043,11 +2043,10 @@ function initWideHeroSectionAnimation(page) {
 let firstLoadButtonAnimationFlag = true;
 function initButtonHoverAnimation(page) {
   if (firstLoadButtonAnimationFlag){
-    const buttons = document.querySelectorAll('[data-animate-button]');
+    page = document;
     firstLoadButtonAnimationFlag = false;
-  } else {
-    const buttons = page.querySelectorAll('[data-animate-button]');
   }
+  const buttons = page.querySelectorAll('[data-animate-button]');
   if (buttons.length === 0) return;
 
   buttons.forEach(button => {
