@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.0";
+const version = "4.1.1";
 console.log("V" + version);
 
 
@@ -258,17 +258,17 @@ barba.hooks.afterEnter(data => {
   initAfterEnterFunctions(data.next.container);
 
   //Restart Finsweet
-  if (window.FinsweetAttributes) {
-    try {
-      await window.FinsweetAttributes.modules.list.restart();
-      // await window.FinsweetAttributes.modules.copyclip.restart();
-      // await window.FinsweetAttributes.modules.socialshare.restart();
-    }
-    catch (e) {
-      if (DEBUG) console.warn('Finsweet restart error:', e);
-    }
-  }
-  if (DEBUG) console.log(window.FinsweetAttributes);
+  // if (window.FinsweetAttributes) {
+  //   try {
+  //     await window.FinsweetAttributes.modules.list.restart();
+  //     // await window.FinsweetAttributes.modules.copyclip.restart();
+  //     // await window.FinsweetAttributes.modules.socialshare.restart();
+  //   }
+  //   catch (e) {
+  //     if (DEBUG) console.warn('Finsweet restart error:', e);
+  //   }
+  // }
+  // if (DEBUG) console.log(window.FinsweetAttributes);
 
   // Settle
   if (hasLenis) {
