@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.16";
+const version = "4.1.17";
 console.log("V" + version);
 
 
@@ -1804,6 +1804,7 @@ function initFadeInAnimation(page) {
   if (targets.length === 0) return;
 
   targets.forEach(target => {
+    let targetDelay = target.getAttribute('animate-fade-in') || 0.5;
     gsap.set(target, {
       autoAlpha: 0,
     });
@@ -1811,7 +1812,7 @@ function initFadeInAnimation(page) {
     gsap.to(target, {
       autoAlpha: 1,
       duration: 1,
-      delay: 0.5,
+      delay: targetDelay,
       scrollTrigger: {
         trigger: target,
         start: "top bottom",
@@ -1828,6 +1829,7 @@ function initFadeInFromBottomAnimation(page) {
   if (targets.length === 0) return;
 
   targets.forEach(target => {
+    let targetDelay = target.getAttribute('animate-fade-in') || 0.2;
 
     gsap.set(target, {
       y: "1.5rem",
@@ -1846,7 +1848,7 @@ function initFadeInFromBottomAnimation(page) {
       y: "0rem",
       autoAlpha: 1,
       duration: 0.7,
-    }, 0.2);
+    }, targetDelay);
 
   });
   // if (DEBUG) console.log("Fade in from bottom animation initialized");
