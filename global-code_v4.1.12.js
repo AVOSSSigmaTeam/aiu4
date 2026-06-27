@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.11";
+const version = "4.1.12";
 console.log("V" + version);
 
 
@@ -2429,6 +2429,7 @@ function filterButtonTest() {
     button.addEventListener('click', () => {
       if (hasScrollTrigger) {
         ScrollTrigger.refresh();
+        if (DEBUG) console.log("scrolltrigger refresh");
       }
     })
   })
