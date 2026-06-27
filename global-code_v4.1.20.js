@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.19";
+const version = "4.1.20";
 console.log("V" + version);
 
 
@@ -2442,7 +2442,7 @@ function filterButtonTest() {
 
 
 function initScionHeroGsap() {
-  const hero = document.querySelector(".wide-section-content.hero-1");
+  const hero = document.querySelector(".wide-section-content.hero-2");
   if (!hero || typeof gsap === "undefined") return;
 
   const main = hero.querySelector(".main-container.inside-wide-section");
