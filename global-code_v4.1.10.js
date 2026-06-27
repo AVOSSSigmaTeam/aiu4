@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.9";
+const version = "4.1.10";
 console.log("V" + version);
 
 
@@ -2398,17 +2398,6 @@ function setArticleBodyLinksToNofollow(
   });
 }
 
-function filterButtonTest() {
-  const buttons = document.querySelectorAll('[data-filter-button]');
-
-  buttons.forEach(button => {
-    button.addEventListener('click', () => {
-      if (hasScrollTrigger) {
-        ScrollTrigger.refresh();
-      }
-    })
-  })
-}
 
 
 // TODO init coming-soon / legal page blob animation
@@ -2421,3 +2410,24 @@ function filterButtonTest() {
 
 // WF
 // TODO check map, not visible on iOS
+
+
+
+
+
+
+
+
+
+
+function filterButtonTest() {
+  const buttons = document.querySelectorAll('[data-filter-button]');
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      if (hasScrollTrigger) {
+        ScrollTrigger.refresh();
+      }
+    })
+  })
+}
