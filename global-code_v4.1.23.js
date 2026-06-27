@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.22";
+const version = "4.1.23";
 console.log("V" + version);
 
 
@@ -2543,58 +2543,11 @@ function drift(el, steps) {
   return timeline;
 }
 
+
+
+
 function initComingSoonCountDownTimer(page) {
-  var CDown = function () {
-    this.state = 0, this.counts = [], this.interval = null
-  };
-  CDown.prototype = {
-    init: function () {
-      this.state = 1;
-      var t = this;
-      this.interval = window.setInterval(function () {
-        t.tick()
-      }, 25)
-    },
-    add: function (t, i) {
-      this.counts.push({
-        d: t,
-        id: i
-      }), this.tick(), 0 == this.state && this.init()
-    },
-    expire: function (t) {
-      for (var i in t) this.display(this.counts[t[i]], "New features launching soon!"), this.counts.splice(t[i], 1)
-    },
-    format: function (t) {
-      var i = "";
-      return i += (t.d < 10 ? "0" : "") + t.d + "  : ", i += (t.h < 10 ? "0" : "") + t.h + "  : ", i += (t.m < 10 ? "0" : "") + t.m + "  : ", (i += (t.s < 10 ? "0" : "") + t.s + "." + t.ms + "  : ").substr(0, i.length - 3)
-    },
-    math: function (t) {
-      var i = w = d = h = m = s = ms = 0;
-      return ms = ("" + (t % 1e3 + 1e3)).substr(1, 2), i = Math.floor((t = Math.floor(t / 1e3)) / 31536e3), w = Math.floor(t / 604800), d = Math.floor(t / 86400), t %= 86400, h = Math.floor(t / 3600), t %= 3600, m = Math.floor(t / 60), t %= 60, {
-        y: i,
-        w: w,
-        d: d,
-        h: h,
-        m: m,
-        s: s = Math.floor(t),
-        ms: ms
-      }
-    },
-    tick: function () {
-      var t = new Date().getTime(),
-        i = [],
-        n = 0,
-        o = 0;
-      if (this.counts)
-        for (var $ = 0, e = this.counts.length; $ < e; ++$)(o = (n = this.counts[$]).d.getTime() - t) < 0 ? i.push($) : this.display(n, this.format(this.math(o)));
-      i.length > 0 && this.expire(i), 0 == this.counts.length && window.clearTimeout(this.interval)
-    },
-    display: function (t, i) {
-      page.getElementById(t.id).innerHTML = i
-    }
-  }, window.onload = function () {
-    new CDown().add(new Date(2026, 6, 23, 18, 0o0, 0), "timer")
-  };
+var CDown=function(){this.state=0,this.counts=[],this.interval=null};CDown.prototype={init:function(){this.state=1;var t=this;this.interval=window.setInterval(function(){t.tick()},25)},add:function(t,i){this.counts.push({d:t,id:i}),this.tick(),0==this.state&&this.init()},expire:function(t){for(var i in t)this.display(this.counts[t[i]],"New features launching soon!"),this.counts.splice(t[i],1)},format:function(t){var i="";return i+=(t.d<10?"0":"")+t.d+"  : ",i+=(t.h<10?"0":"")+t.h+"  : ",i+=(t.m<10?"0":"")+t.m+"  : ",(i+=(t.s<10?"0":"")+t.s+"."+t.ms+"  : ").substr(0,i.length-3)},math:function(t){var i=w=d=h=m=s=ms=0;return ms=(""+(t%1e3+1e3)).substr(1,2),i=Math.floor((t=Math.floor(t/1e3))/31536e3),w=Math.floor(t/604800),d=Math.floor(t/86400),t%=86400,h=Math.floor(t/3600),t%=3600,m=Math.floor(t/60),t%=60,{y:i,w:w,d:d,h:h,m:m,s:s=Math.floor(t),ms:ms}},tick:function(){var t=new Date().getTime(),i=[],n=0,o=0;if(this.counts)for(var $=0,e=this.counts.length;$<e;++$)(o=(n=this.counts[$]).d.getTime()-t)<0?i.push($):this.display(n,this.format(this.math(o)));i.length>0&&this.expire(i),0==this.counts.length&&window.clearTimeout(this.interval)},display:function(t,i){page.getElementById(t.id).innerHTML=i}},window.onload=function(){new CDown().add(new Date(2026,6,23,18,0o0,0),"timer")};
 }
 
 
