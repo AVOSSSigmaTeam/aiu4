@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.18";
+const version = "4.1.19";
 console.log("V" + version);
 
 
@@ -102,6 +102,8 @@ function initAfterEnterFunctions(next) {
 
   // Add scrolltrigger based animations below
   initPageBlurAnimation();
+
+  initScionHeroGsap(); //TEST TODO wrap in has if works
 
   if (has('[data-aiu-ascii-gallery]')) initImageAsciiReveal(nextPage);
 
@@ -1853,8 +1855,7 @@ function initFadeInFromBottomAnimation(page) {
   });
   // if (DEBUG) console.log("Fade in from bottom animation initialized");
 }
-
-// TODO finish and optimize, section flashes into existance when transitioning from another page, and flashes on repeat
+ 
 function initWideHeroSectionAnimation(page) {
   const content = page.querySelector('[data-wide-section-content]');
   const container = page.querySelector('[data-wide-section-main-container]');
@@ -1869,13 +1870,11 @@ function initWideHeroSectionAnimation(page) {
     opacity: 1,
     duration: 1,
     ease: "outQuart",
-    // delay: 1.26,
   });
   gsap.to(container, {
     opacity: 1,
     duration: 0.2,
     ease: "easeOut",
-    // delay: 1.76,
     delay: .5,
   });
 
@@ -2408,7 +2407,6 @@ function setArticleBodyLinksToNofollow(
 
 // TODO init coming-soon / legal page blob animation
 
-// TODO init button hover animation
 
 // TODO init blob animations
 
@@ -2433,8 +2431,121 @@ function filterButtonTest() {
     button.addEventListener('click', () => {
       if (hasScrollTrigger) {
         ScrollTrigger.refresh();
-        if (DEBUG) console.log("scrolltrigger refresh" + button);
+        // if (DEBUG) console.log("scrolltrigger refresh" + button);
       }
     })
   })
+}
+
+
+
+
+
+function initScionHeroGsap() {
+  const hero = document.querySelector(".wide-section-content.hero-1");
+  if (!hero || typeof gsap === "undefined") return;
+
+  const main = hero.querySelector(".main-container.inside-wide-section");
+  const blobs = {
+    a: hero.querySelector(".hero-blob-wrapper-a"),
+    b: hero.querySelector(".hero-blob-wrapper-b"),
+    c: hero.querySelector(".hero-blob-wrapper-c"),
+    d: hero.querySelector(".hero-blob-wrapper-d"),
+    e: hero.querySelector(".hero-blob-wrapper-e"),
+  };
+
+  const presentBlobs = Object.values(blobs).filter(Boolean);
+
+  gsap.set([hero, main, ...presentBlobs], {
+    force3D: true,
+    transformStyle: "preserve-3d",
+    willChange: "transform, opacity",
+  });
+
+  gsap.set(hero, { autoAlpha: 0 });
+  gsap.set(main, { autoAlpha: 0, yPercent: 10 });
+
+  setBlob(blobs.a, { x: "-8vw", y: "-10vh", scale: 2 });
+  setBlob(blobs.b, { x: "-34vw", y: "-37vh", scale: 1, autoAlpha: 0 });
+  setBlob(blobs.c, { x: "-42vw", y: "51vh", scale: 1.2 });
+  setBlob(blobs.d, { x: "-62vw", y: "44vh", scale: 1.5, autoAlpha: 1 });
+  setBlob(blobs.e, { x: "-8vw", y: "59vh", scale: 0.8, skewX: 7 });
+
+  const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+  intro
+    .to(hero, { autoAlpha: 1, duration: 0.55 }, 0)
+    .to(main, { autoAlpha: 1, yPercent: 0, duration: 0.55 }, 0.28);
+
+  drift(blobs.a, [
+    [8, { x: "-35.7vw", y: "-0.1vh", scale: 1.82 }],
+    [5, { x: "-49.5vw", y: "-16.2vh", scale: 1.51 }],
+    [3, { x: "-33.5vw", y: "21vh", scale: 1.7 }],
+    [4, { x: "-31.1vw", y: "21vh", scale: 1.7 }],
+    [6, { x: "-37vw", y: "0.3vh", scale: 1.98 }],
+    [6, { x: "-12.7vw", y: "-10vh", scale: 2 }],
+    [6, { x: "-8vw", y: "-10vh", scale: 2 }],
+  ]);
+
+  drift(blobs.b, [
+    [8, { x: "-3.1vw", y: "21.8vh", scale: 1, autoAlpha: 1 }],
+    [5, { x: "8.4vw", y: "31.4vh", scale: 1, autoAlpha: 1 }],
+    [3, { x: "-25.8vw", y: "0.2vh", scale: 1.58, autoAlpha: 1 }],
+    [4, { x: "-32.8vw", y: "-24.1vh", scale: 1.09, autoAlpha: 1 }],
+    [6, { x: "-33.9vw", y: "-35.2vh", scale: 1, autoAlpha: 0.1 }],
+    [6, { x: "-37.8vw", y: "-32.2vh", scale: 1, autoAlpha: 0 }],
+    [6, { x: "-34vw", y: "-37vh", scale: 1, autoAlpha: 0 }],
+  ]);
+
+  drift(blobs.c, [
+    [8, { x: "-61.7vw", y: "14.5vh", scale: 1.2, skewY: 1 }],
+    [5, { x: "-43.3vw", y: "51.7vh", scale: 1.2, skewY: 4 }],
+    [3, { x: "1vw", y: "72.1vh", scale: 1.05, skewY: 0 }],
+    [4, { x: "1vw", y: "76vh", scale: 1.17, skewY: 0 }],
+    [6, { x: "-33.3vw", y: "68.6vh", scale: 1.2, skewY: 0 }],
+    [6, { x: "-36.4vw", y: "61.3vh", scale: 1.2, skewY: 0 }],
+    [6, { x: "-42vw", y: "51vh", scale: 1.2, skewY: 0 }],
+  ]);
+
+  drift(blobs.d, [
+    [8, { x: "-29.7vw", y: "24.7vh", scale: 1.5, autoAlpha: 1 }],
+    [5, { x: "-43.3vw", y: "51vh", scale: 1.5, autoAlpha: 1 }],
+    [3, { x: "11.9vw", y: "2vh", scale: 1.5, autoAlpha: 0.97 }],
+    [4, { x: "15vw", y: "2vh", scale: 1.5, autoAlpha: 0.05 }],
+    [6, { x: "-26.4vw", y: "2vh", scale: 1.5, autoAlpha: 0.61 }],
+    [6, { x: "-58.4vw", y: "2vh", scale: 1.5, autoAlpha: 0.15 }],
+    [6, { x: "-62vw", y: "44vh", scale: 1.5, autoAlpha: 1 }],
+  ]);
+
+  drift(blobs.e, [
+    [8, { x: "9.5vw", y: "20.1vh", scale: 0.8, skewX: 11.8, autoAlpha: 1 }],
+    [5, { x: "19vw", y: "27vh", scale: 1.05, skewX: 36.2, autoAlpha: 0.64 }],
+    [3, { x: "-34.6vw", y: "5vh", scale: 1.3, skewX: 5.75, autoAlpha: 1 }],
+    [4, { x: "-39vw", y: "-28.6vh", scale: 1.3, skewX: 7, autoAlpha: 1 }],
+    [6, { x: "-49vw", y: "-26vh", scale: 1.3, skewX: 7, autoAlpha: 1 }],
+    [6, { x: "-63.1vw", y: "-15.7vh", scale: 1.3, skewX: 7, autoAlpha: 1 }],
+    [6, { x: "-8vw", y: "59vh", scale: 0.8, skewX: 7, autoAlpha: 1 }],
+  ]);
+}
+function setBlob(el, vars) {
+  if (!el) return;
+  gsap.set(el, {
+    skewX: 0,
+    skewY: 0,
+    ...vars,
+  });
+}
+function drift(el, steps) {
+  if (!el) return null;
+
+  const timeline = gsap.timeline({
+    repeat: -1,
+    defaults: { ease: "sine.inOut" },
+  });
+
+  steps.forEach(([duration, vars]) => {
+    timeline.to(el, { duration, ...vars });
+  });
+
+  return timeline;
 }
