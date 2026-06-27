@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.12";
+const version = "4.1.13";
 console.log("V" + version);
 
 
@@ -1816,6 +1816,7 @@ function initFadeInAnimation(page) {
         trigger: target,
         start: "top bottom",
         once: true,
+        markers: DEBUG,
       },
     });
   });
@@ -1837,7 +1838,7 @@ function initFadeInFromBottomAnimation(page) {
       scrollTrigger: {
         trigger: target,
         start: "top bottom",
-        // markers: DEBUG,
+        markers: DEBUG,
       },
     });
 
@@ -2429,7 +2430,7 @@ function filterButtonTest() {
     button.addEventListener('click', () => {
       if (hasScrollTrigger) {
         ScrollTrigger.refresh();
-        if (DEBUG) console.log("scrolltrigger refresh");
+        if (DEBUG) console.log("scrolltrigger refresh" + button);
       }
     })
   })
