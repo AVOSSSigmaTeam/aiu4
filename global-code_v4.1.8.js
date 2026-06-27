@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.7";
+const version = "4.1.8";
 console.log("V" + version);
 
 
@@ -85,8 +85,6 @@ function initBeforeEnterFunctions(next) {
   if (has('[data-faq-item]')) initFAQ(nextPage);
   if (has('[data-faq-tabs]')) initFAQWraps(nextPage);
 
-  if (has('[data-counter]')) initCounters(nextPage);
-
   if (has('[data-footer]')) setCopyrightYear(nextPage);
 
   if (has('[data-service-icon-box]')) initServiceIconBoxBlobAnimation(nextPage);
@@ -114,6 +112,7 @@ function initAfterEnterFunctions(next) {
   if (has('[animate-fade-in]')) initFadeInAnimation(nextPage);
   if (has('[animate-fade-in-from-bottom]')) initFadeInFromBottomAnimation(nextPage);
 
+  if (has('[data-counter]')) initCounters(nextPage);
 
   if (has('[data-wide-section-content]')) initWideHeroSectionAnimation(nextPage); //TEST
 
@@ -544,7 +543,7 @@ function initHighlightText(page) {
 
   ScrollTrigger.refresh();
 }
-//TODO check if works, and make sure it runs correctly with the page transition.
+
 function initPortalButtons() {
   "use strict";
 
@@ -971,27 +970,18 @@ function initFAQ(page) {
       let isOpen = item.getAttribute("data-faq-open") === "true";
 
       if (isOpen) {
-
         tl.reverse();
-
         item.setAttribute("data-faq-open", "false");
-
         // if (DEBUG) console.log("FAQ item closed:", question.textContent.trim(), item.getAttribute("data-faq-open"));
-
       } else {
-
         tl.restart();
-
         item.setAttribute("data-faq-open", "true");
-
         // if (DEBUG) console.log("FAQ item opened:", question.textContent.trim(), item.getAttribute("data-faq-open"));
-
       }
     });
   });
 
   // if (DEBUG) console.log("FAQ initialized");
-
 }
 function initFAQWraps(page) {
   const blocks = page.querySelectorAll('[data-faq-block]');
@@ -1037,7 +1027,7 @@ function initCounters(page) { // TODO fix, not working when tranisitioning
         trigger: counterTrigger,
         start: "top 50%",
         // end: "bottom top",
-        // markers: DEBUG,
+        markers: DEBUG,
       }
     })
   });
@@ -1731,22 +1721,22 @@ function initServiceIconBoxBlobAnimation(page) {
       duration: 0.2,
       ease: "linear",
     }, 0)
-      .to(grid, {
-        opacity: .6,
-        duration: 0.2,
-        ease: "linear",
-      }, 0)
-      .to(box, {
-        backgroundColor: "var(--colors-brand--brand-1)",
-        duration: 0.2,
-        ease: "linear",
-      }, 0)
-      .to(blobB, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.2,
-        ease: "linear",
-      }, 0.2);
+    .to(grid, {
+      opacity: .6,
+      duration: 0.2,
+      ease: "linear",
+    }, 0)
+    .to(box, {
+      backgroundColor: "var(--colors-brand--brand-1)",
+      duration: 0.2,
+      ease: "linear",
+    }, 0)
+    .to(blobB, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.2,
+      ease: "linear",
+    }, 0.2);
 
 
     box.addEventListener("pointerenter", () => {
@@ -1845,7 +1835,7 @@ function initFadeInFromBottomAnimation(page) {
       scrollTrigger: {
         trigger: target,
         start: "top bottom",
-        markers: DEBUG,
+        // markers: DEBUG,
       },
     });
 
