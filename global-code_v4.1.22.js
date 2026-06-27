@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.21";
+const version = "4.1.22";
 console.log("V" + version);
 
 
@@ -92,6 +92,8 @@ function initBeforeEnterFunctions(next) {
   if (has('[data-service-icon-box]')) initServiceIconBoxBlobAnimation(nextPage);
 
   if (has('[data-aiu-balkan-map]')) initAnimatedMap();
+
+  if (has('[data-coming-soon-timer]')) initComingSoonCountDownTimer(nextPage);
 }
 
 function initAfterEnterFunctions(next) {
@@ -1725,22 +1727,22 @@ function initServiceIconBoxBlobAnimation(page) {
       duration: 0.2,
       ease: "linear",
     }, 0)
-    .to(grid, {
-      opacity: .6,
-      duration: 0.2,
-      ease: "linear",
-    }, 0)
-    .to(box, {
-      backgroundColor: "var(--colors-brand--brand-1)",
-      duration: 0.2,
-      ease: "linear",
-    }, 0)
-    .to(blobB, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.2,
-      ease: "linear",
-    }, 0.2);
+      .to(grid, {
+        opacity: .6,
+        duration: 0.2,
+        ease: "linear",
+      }, 0)
+      .to(box, {
+        backgroundColor: "var(--colors-brand--brand-1)",
+        duration: 0.2,
+        ease: "linear",
+      }, 0)
+      .to(blobB, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.2,
+        ease: "linear",
+      }, 0.2);
 
 
     box.addEventListener("pointerenter", () => {
@@ -1855,7 +1857,7 @@ function initFadeInFromBottomAnimation(page) {
   });
   // if (DEBUG) console.log("Fade in from bottom animation initialized");
 }
- 
+
 function initWideHeroSectionAnimation(page) {
   const content = page.querySelector('[data-wide-section-content]');
   const container = page.querySelector('[data-wide-section-main-container]');
@@ -1996,7 +1998,7 @@ function initWideHeroSectionAnimation(page) {
 
 let firstLoadButtonAnimationFlag = true;
 function initButtonHoverAnimation(page) {
-  if (firstLoadButtonAnimationFlag){
+  if (firstLoadButtonAnimationFlag) {
     page = document;
     firstLoadButtonAnimationFlag = false;
   }
@@ -2403,27 +2405,6 @@ function setArticleBodyLinksToNofollow(
   });
 }
 
-
-
-// TODO init coming-soon / legal page blob animation
-
-
-// TODO init blob animations
-
-// TODO glitter map not working on transition
-
-// WF
-// TODO check map, not visible on iOS
-
-
-
-
-
-
-
-
-
-
 function filterButtonTest() {
   const buttons = document.querySelectorAll('[data-filter-button]');
 
@@ -2437,10 +2418,7 @@ function filterButtonTest() {
   })
 }
 
-
-
-
-
+// TODO init coming-soon / legal page blob animation
 function initScionHeroGsap() {
   const hero = document.querySelector(".wide-section-content.hero-2");
   if (!hero || typeof gsap === "undefined") return;
@@ -2504,22 +2482,22 @@ function initScionHeroGsap() {
   ]);
 
   drift(blobs.c, [
-    [8, { x: "-62vw", y: "11vh",  }],
+    [8, { x: "-62vw", y: "11vh", }],
     [4, { x: "-50vw", y: "47vh", skewY: 4 }],
-    [6, { x: "-13vw", y: "73vh",  }],
+    [6, { x: "-13vw", y: "73vh", }],
     [4, { x: "2vw", y: "37vh", skewY: 0 }],
     [4, { x: "1vw", y: "16vh", scale: 1.3 }],
     [4, { x: "1vw", y: "16vh", scale: 1.3 }],
     [4, { x: "1vw", y: "76vh", scale: 1 }],
     [4, { x: "1vw", y: "76vh", scale: 1.2 }],
-    [7, { x: "-36vw", y: "68vh",  }],
-    [8, { x: "-37vw", y: "51vh",  }],
+    [7, { x: "-36vw", y: "68vh", }],
+    [8, { x: "-37vw", y: "51vh", }],
   ]);
 
   drift(blobs.d, [
     [8, { x: "-27vw", y: "22vh", autoAlpha: 1 }],
-    [4, { x: "-47vw", y: "42vh",  }],
-    [6, { x: "-40vw", y: "59vh",  }],
+    [4, { x: "-47vw", y: "42vh", }],
+    [6, { x: "-40vw", y: "59vh", }],
     [4, { x: "-19vw", y: "39vh", autoAlpha: .69, scale: 1.5 }],
     [4, { x: "-8vw", y: "2vh", autoAlpha: 0 }],
     [4, { x: "4vw", y: "2vh", autoAlpha: .5 }],
@@ -2530,16 +2508,16 @@ function initScionHeroGsap() {
   ]);
 
   drift(blobs.e, [
-    [8, { x: "8vw", y: "19vh",  }],
+    [8, { x: "8vw", y: "19vh", }],
     [4, { x: "19vw", y: "27vh", skewX: 26 }],
     [6, { x: "19vw", y: "27vh", skewX: 54, autoAlpha: 0, scale: 1.5 }],
     [4, { x: "30vw", y: "30vh", autoAlpha: .5, skewX: 12, }],
     [4, { x: "1vw", y: "2vh", skewX: -10, autoAlpha: 1 }],
     [4, { x: "-10vw", y: "5vh", autoAlpha: 1, scale: 1.3, skewX: 0 }],
     [4, { x: "-40vw", y: "5vh", skewX: 7, autoAlpha: 1, }],
-    [4, { x: "-39vw", y: "-30vh", scale: 1.3  }],
-    [7, { x: "-54vw", y: "-24vh",  }],
-    [8, { x: "-66vw", y: "-13vh",  }],
+    [4, { x: "-39vw", y: "-30vh", scale: 1.3 }],
+    [7, { x: "-54vw", y: "-24vh", }],
+    [8, { x: "-66vw", y: "-13vh", }],
   ]);
 }
 function setBlob(el, vars) {
@@ -2564,3 +2542,64 @@ function drift(el, steps) {
 
   return timeline;
 }
+
+function initComingSoonCountDownTimer(page) {
+  var CDown = function () {
+    this.state = 0, this.counts = [], this.interval = null
+  };
+  CDown.prototype = {
+    init: function () {
+      this.state = 1;
+      var t = this;
+      this.interval = window.setInterval(function () {
+        t.tick()
+      }, 25)
+    },
+    add: function (t, i) {
+      this.counts.push({
+        d: t,
+        id: i
+      }), this.tick(), 0 == this.state && this.init()
+    },
+    expire: function (t) {
+      for (var i in t) this.display(this.counts[t[i]], "New features launching soon!"), this.counts.splice(t[i], 1)
+    },
+    format: function (t) {
+      var i = "";
+      return i += (t.d < 10 ? "0" : "") + t.d + "  : ", i += (t.h < 10 ? "0" : "") + t.h + "  : ", i += (t.m < 10 ? "0" : "") + t.m + "  : ", (i += (t.s < 10 ? "0" : "") + t.s + "." + t.ms + "  : ").substr(0, i.length - 3)
+    },
+    math: function (t) {
+      var i = w = d = h = m = s = ms = 0;
+      return ms = ("" + (t % 1e3 + 1e3)).substr(1, 2), i = Math.floor((t = Math.floor(t / 1e3)) / 31536e3), w = Math.floor(t / 604800), d = Math.floor(t / 86400), t %= 86400, h = Math.floor(t / 3600), t %= 3600, m = Math.floor(t / 60), t %= 60, {
+        y: i,
+        w: w,
+        d: d,
+        h: h,
+        m: m,
+        s: s = Math.floor(t),
+        ms: ms
+      }
+    },
+    tick: function () {
+      var t = new Date().getTime(),
+        i = [],
+        n = 0,
+        o = 0;
+      if (this.counts)
+        for (var $ = 0, e = this.counts.length; $ < e; ++$)(o = (n = this.counts[$]).d.getTime() - t) < 0 ? i.push($) : this.display(n, this.format(this.math(o)));
+      i.length > 0 && this.expire(i), 0 == this.counts.length && window.clearTimeout(this.interval)
+    },
+    display: function (t, i) {
+      page.getElementById(t.id).innerHTML = i
+    }
+  }, window.onload = function () {
+    new CDown().add(new Date(2026, 6, 23, 18, 0o0, 0), "timer")
+  };
+}
+
+
+
+
+
+// WF
+// TODO check map, not visible on iOS
