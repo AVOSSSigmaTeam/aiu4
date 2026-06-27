@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.13";
+const version = "4.1.14";
 console.log("V" + version);
 
 
@@ -1876,7 +1876,7 @@ function initWideHeroSectionAnimation(page) {
   }, 1.76)
 
 
-  const tl = gsap.timeline({ repeat: -1, });
+  const tl = gsap.timeline({ repeat: -1, yoyo: true });
 
   tl.to(blobA, {
     x: "500px",
