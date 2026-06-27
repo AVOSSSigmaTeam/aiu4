@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.15";
+const version = "4.1.16";
 console.log("V" + version);
 
 
@@ -116,7 +116,7 @@ function initAfterEnterFunctions(next) {
 
   if (has('[data-counter]')) initCounters(nextPage);
 
-  if (has('[data-wide-section-content]')) initWideHeroSectionAnimation(nextPage); //TEST
+  if (has('[data-wide-section-content]')) initWideHeroSectionAnimation(nextPage);
 
   if (hasLenis) {
     lenis.resize();
@@ -1867,13 +1867,14 @@ function initWideHeroSectionAnimation(page) {
     opacity: 1,
     duration: 1,
     ease: "outQuart",
-  }, 1.26);
+    delay: 1.26,
+  });
   gsap.to(container, {
     opacity: 1,
-    // y: '0%',
     duration: 0.2,
     ease: "easeOut",
-  }, 1.76)
+    delay: 1.76,
+  });
 
 
   const tl = gsap.timeline({ delay: 1.26, repeat: -1, yoyo: true });
@@ -1988,8 +1989,7 @@ function initWideHeroSectionAnimation(page) {
       ease: "easeInOut",
     }, 8.2);
 
-
-  if (DEBUG) console.log("Wide hero animation initilized");
+  // if (DEBUG) console.log("Wide hero animation initilized");
 }
 
 let firstLoadButtonAnimationFlag = true;
