@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.20";
+const version = "4.1.21";
 console.log("V" + version);
 
 
@@ -2478,53 +2478,68 @@ function initScionHeroGsap() {
     .to(main, { autoAlpha: 1, yPercent: 0, duration: 0.55 }, 0.28);
 
   drift(blobs.a, [
-    [8, { x: "-35.7vw", y: "-0.1vh", scale: 1.82 }],
-    [5, { x: "-49.5vw", y: "-16.2vh", scale: 1.51 }],
-    [3, { x: "-33.5vw", y: "21vh", scale: 1.7 }],
-    [4, { x: "-31.1vw", y: "21vh", scale: 1.7 }],
-    [6, { x: "-37vw", y: "0.3vh", scale: 1.98 }],
-    [6, { x: "-12.7vw", y: "-10vh", scale: 2 }],
-    [6, { x: "-8vw", y: "-10vh", scale: 2 }],
+    [8, { x: "-28vw", y: "11vh", }],
+    [4, { x: "-48vw", y: "-18vh", scale: 1.3 }],
+    [6, { x: "-56vw", y: "-8vh", scale: 1.7 }],
+    [4, { x: "-59vw", y: "16vh", }],
+    [4, { x: "-44vw", y: "21vh", }],
+    [4, { x: "-36vw", y: "21vh", }],
+    [4, { x: "-33vw", y: "21vh", }],
+    [4, { x: "-31vw", y: "21vh", }],
+    [7, { x: "-40vw", y: "-10vh", scale: 2 }],
+    [8, { x: "-4vw", y: "-10vh", }],
   ]);
 
   drift(blobs.b, [
-    [8, { x: "-3.1vw", y: "21.8vh", scale: 1, autoAlpha: 1 }],
-    [5, { x: "8.4vw", y: "31.4vh", scale: 1, autoAlpha: 1 }],
-    [3, { x: "-25.8vw", y: "0.2vh", scale: 1.58, autoAlpha: 1 }],
-    [4, { x: "-32.8vw", y: "-24.1vh", scale: 1.09, autoAlpha: 1 }],
-    [6, { x: "-33.9vw", y: "-35.2vh", scale: 1, autoAlpha: 0.1 }],
-    [6, { x: "-37.8vw", y: "-32.2vh", scale: 1, autoAlpha: 0 }],
-    [6, { x: "-34vw", y: "-37vh", scale: 1, autoAlpha: 0 }],
+    [8, { x: "-10vw", y: "13vh", autoAlpha: 1 }],
+    [4, { x: "8vw", y: "36vh", }],
+    [6, { x: "10vw", y: "11vh", }],
+    [4, { x: "-2vw", y: "5vh", scale: 1.4 }],
+    [4, { x: "13vw", y: "76vh", }],
+    [4, { x: "-4vw", y: "22vh", scale: 1.5 }],
+    [4, { x: "-27vw", y: "-1vh", scale: 1.6 }],
+    [4, { x: "-33vw", y: "-25vh", scale: 1 }],
+    [7, { x: "-34vw", y: "-36vh", autoAlpha: 0 }],
+    [8, { x: "-39vw", y: "-31vh", }],
   ]);
 
   drift(blobs.c, [
-    [8, { x: "-61.7vw", y: "14.5vh", scale: 1.2, skewY: 1 }],
-    [5, { x: "-43.3vw", y: "51.7vh", scale: 1.2, skewY: 4 }],
-    [3, { x: "1vw", y: "72.1vh", scale: 1.05, skewY: 0 }],
-    [4, { x: "1vw", y: "76vh", scale: 1.17, skewY: 0 }],
-    [6, { x: "-33.3vw", y: "68.6vh", scale: 1.2, skewY: 0 }],
-    [6, { x: "-36.4vw", y: "61.3vh", scale: 1.2, skewY: 0 }],
-    [6, { x: "-42vw", y: "51vh", scale: 1.2, skewY: 0 }],
+    [8, { x: "-62vw", y: "11vh",  }],
+    [4, { x: "-50vw", y: "47vh", skewY: 4 }],
+    [6, { x: "-13vw", y: "73vh",  }],
+    [4, { x: "2vw", y: "37vh", skewY: 0 }],
+    [4, { x: "1vw", y: "16vh", scale: 1.3 }],
+    [4, { x: "1vw", y: "16vh", scale: 1.3 }],
+    [4, { x: "1vw", y: "76vh", scale: 1 }],
+    [4, { x: "1vw", y: "76vh", scale: 1.2 }],
+    [7, { x: "-36vw", y: "68vh",  }],
+    [8, { x: "-37vw", y: "51vh",  }],
   ]);
 
   drift(blobs.d, [
-    [8, { x: "-29.7vw", y: "24.7vh", scale: 1.5, autoAlpha: 1 }],
-    [5, { x: "-43.3vw", y: "51vh", scale: 1.5, autoAlpha: 1 }],
-    [3, { x: "11.9vw", y: "2vh", scale: 1.5, autoAlpha: 0.97 }],
-    [4, { x: "15vw", y: "2vh", scale: 1.5, autoAlpha: 0.05 }],
-    [6, { x: "-26.4vw", y: "2vh", scale: 1.5, autoAlpha: 0.61 }],
-    [6, { x: "-58.4vw", y: "2vh", scale: 1.5, autoAlpha: 0.15 }],
-    [6, { x: "-62vw", y: "44vh", scale: 1.5, autoAlpha: 1 }],
+    [8, { x: "-27vw", y: "22vh", autoAlpha: 1 }],
+    [4, { x: "-47vw", y: "42vh",  }],
+    [6, { x: "-40vw", y: "59vh",  }],
+    [4, { x: "-19vw", y: "39vh", autoAlpha: .69, scale: 1.5 }],
+    [4, { x: "-8vw", y: "2vh", autoAlpha: 0 }],
+    [4, { x: "4vw", y: "2vh", autoAlpha: .5 }],
+    [4, { x: "15vw", y: "2vh", autoAlpha: 1 }],
+    [4, { x: "15vw", y: "2vh", autoAlpha: 0 }],
+    [7, { x: "-47vw", y: "2vh", autoAlpha: .67 }],
+    [8, { x: "-62vw", y: "2vh", autoAlpha: .15 }],
   ]);
 
   drift(blobs.e, [
-    [8, { x: "9.5vw", y: "20.1vh", scale: 0.8, skewX: 11.8, autoAlpha: 1 }],
-    [5, { x: "19vw", y: "27vh", scale: 1.05, skewX: 36.2, autoAlpha: 0.64 }],
-    [3, { x: "-34.6vw", y: "5vh", scale: 1.3, skewX: 5.75, autoAlpha: 1 }],
-    [4, { x: "-39vw", y: "-28.6vh", scale: 1.3, skewX: 7, autoAlpha: 1 }],
-    [6, { x: "-49vw", y: "-26vh", scale: 1.3, skewX: 7, autoAlpha: 1 }],
-    [6, { x: "-63.1vw", y: "-15.7vh", scale: 1.3, skewX: 7, autoAlpha: 1 }],
-    [6, { x: "-8vw", y: "59vh", scale: 0.8, skewX: 7, autoAlpha: 1 }],
+    [8, { x: "8vw", y: "19vh",  }],
+    [4, { x: "19vw", y: "27vh", skewX: 26 }],
+    [6, { x: "19vw", y: "27vh", skewX: 54, autoAlpha: 0, scale: 1.5 }],
+    [4, { x: "30vw", y: "30vh", autoAlpha: .5, skewX: 12, }],
+    [4, { x: "1vw", y: "2vh", skewX: -10, autoAlpha: 1 }],
+    [4, { x: "-10vw", y: "5vh", autoAlpha: 1, scale: 1.3, skewX: 0 }],
+    [4, { x: "-40vw", y: "5vh", skewX: 7, autoAlpha: 1, }],
+    [4, { x: "-39vw", y: "-30vh", scale: 1.3  }],
+    [7, { x: "-54vw", y: "-24vh",  }],
+    [8, { x: "-66vw", y: "-13vh",  }],
   ]);
 }
 function setBlob(el, vars) {
@@ -2540,7 +2555,7 @@ function drift(el, steps) {
 
   const timeline = gsap.timeline({
     repeat: -1,
-    defaults: { ease: "sine.inOut" },
+    defaults: { ease: "easeInOut" },
   });
 
   steps.forEach(([duration, vars]) => {
