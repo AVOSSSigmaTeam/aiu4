@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.17";
+const version = "4.1.18";
 console.log("V" + version);
 
 
@@ -1804,7 +1804,7 @@ function initFadeInAnimation(page) {
   if (targets.length === 0) return;
 
   targets.forEach(target => {
-    let targetDelay = target.getAttribute('animate-fade-in') || 0.5;
+    let targetDelay = target.getAttribute('animate-fade-in') || 0.2;
     gsap.set(target, {
       autoAlpha: 0,
     });
@@ -1817,7 +1817,7 @@ function initFadeInAnimation(page) {
         trigger: target,
         start: "top bottom",
         once: true,
-        markers: DEBUG,
+        // markers: DEBUG,
       },
     });
   });
@@ -1840,7 +1840,7 @@ function initFadeInFromBottomAnimation(page) {
       scrollTrigger: {
         trigger: target,
         start: "top bottom",
-        markers: DEBUG,
+        // markers: DEBUG,
       },
     });
 
@@ -1869,13 +1869,14 @@ function initWideHeroSectionAnimation(page) {
     opacity: 1,
     duration: 1,
     ease: "outQuart",
-    delay: 1.26,
+    // delay: 1.26,
   });
   gsap.to(container, {
     opacity: 1,
     duration: 0.2,
     ease: "easeOut",
-    delay: 1.76,
+    // delay: 1.76,
+    delay: .5,
   });
 
 
