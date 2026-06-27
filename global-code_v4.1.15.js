@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.14";
+const version = "4.1.15";
 console.log("V" + version);
 
 
@@ -1870,77 +1870,77 @@ function initWideHeroSectionAnimation(page) {
   }, 1.26);
   gsap.to(container, {
     opacity: 1,
-    y: '0%',
+    // y: '0%',
     duration: 0.2,
     ease: "easeOut",
   }, 1.76)
 
 
-  const tl = gsap.timeline({ repeat: -1, yoyo: true });
+  const tl = gsap.timeline({ delay: 1.26, repeat: -1, yoyo: true });
 
   tl.to(blobA, {
     x: "500px",
     y: "271px",
     duration: 8,
     ease: "ease",
-  }, 1.26)
+  }, 0)
     .to(blobA, {
       opacity: 1,
       duration: 3,
       ease: "easeOut",
-    }, 1.26)
+    }, 0)
 
     .to(blobB, {
       x: "202px",
       y: "279px",
       duration: 8,
       ease: "linear",
-    }, 1.26)
+    }, 0)
     .to(blobB, {
       opacity: 1,
       duration: 2,
       ease: "easeOut",
-    }, 1.26)
+    }, 0)
 
     .to(blobC, {
       x: "-30vw",
       y: "-13vh",
       duration: 5,
       ease: "linear",
-    }, 1.26)
+    }, 0)
     .to(blobC, {
       scale: 1,
       duration: 8,
       ease: "easeInOut",
-    }, 1.26)
+    }, 0)
     .to(blobC, {
       skewX: '15deg',
       duration: 2,
       ease: "easeOut",
-    }, 1.26)
+    }, 0)
     .to(blobC, {
       rotationZ: '0deg',
       duration: 2,
       ease: "easeOut",
-    }, 1.26)
+    }, 0)
 
     .to(blobA, {
       scale: 1,
       duration: 8,
       ease: "easeInOut",
-    }, 1.46)
+    }, .2)
 
     .to(blobB, {
       scale: 1,
       duration: 8,
       ease: "easeInOut",
-    }, 1.46)
+    }, .2)
 
     .to(blobC, {
       opacity: 1,
       duration: 2.5,
       ease: "easeOut",
-    }, 1.46)
+    }, .2)
 
 
     .to(blobA, {
@@ -1948,45 +1948,45 @@ function initWideHeroSectionAnimation(page) {
       y: "256px",
       duration: 12,
       ease: "easeInOut",
-    }, 9.46)
+    }, 8.2)
     .to(blobA, {
       opacity: .93,
       duration: 8,
       ease: "bounce",
-    }, 9.46)
+    }, 8.2)
 
     .to(blobB, {
       x: "-340px",
       y: "424px",
       duration: 12,
       ease: "linear",
-    }, 9.46)
+    }, 8.2)
     .to(blobB, {
       opacity: .91,
       duration: 9,
       ease: "linear",
-    }, 9.46)
+    }, 8.2)
     .to(blobB, {
       rotationX: '15deg',
       duration: 12,
       ease: "bounce",
-    }, 9.46)
+    }, 8.2)
 
     .to(blobC, {
       x: "16vw",
       duration: 12,
       ease: "easeInOut",
-    }, 9.46)
+    }, 8.2)
     .to(blobC, {
       opacity: .81,
       duration: 10,
       ease: "easeInOut",
-    }, 9.46)
+    }, 8.2)
     .to(blobC, {
       scale: .9,
       duration: 8,
       ease: "easeInOut",
-    }, 9.46);
+    }, 8.2);
 
 
   if (DEBUG) console.log("Wide hero animation initilized");
