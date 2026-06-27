@@ -5,7 +5,7 @@ gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 history.scrollRestoration = "manual";
 
 const DEBUG = true;
-const version = "4.1.10";
+const version = "4.1.11";
 console.log("V" + version);
 
 
@@ -64,6 +64,8 @@ function initOnceFunctions() {
   initNavigationMenuExpandAnimation();
 
   initFavicons();
+
+  filterButtonTest();
 
 }
 
